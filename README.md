@@ -1,4 +1,4 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/pearjo/knut-app/badge?s=a7cec2fadd18de7c59efd09481f3b8f0b97f35ba)](https://www.codefactor.io/repository/github/pearjo/knut-app)
+[![CodeFactor](https://www.codefactor.io/repository/github/pearjo/knut-app/badge)](https://www.codefactor.io/repository/github/pearjo/knut-app)
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/pearjo/knut-server/blob/master/LICENSE)
 
 # Knut App
@@ -7,7 +7,7 @@
 
 The Knut app is a client for the [Knut Server](https://github.com/pearjo/knut-server).
 
-![Image of the Knut app](https://github.com/pearjo/knut-app/blob/devel/images/showcase.png)
+![Image of the Knut app](https://github.com/pearjo/knut-app/blob/master/images/showcase.png)
 
 ## Install
 
