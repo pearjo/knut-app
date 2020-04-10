@@ -1,4 +1,5 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/pearjo/knut-app/badge)](https://www.codefactor.io/repository/github/pearjo/knut-app)
+[![Documentation Status](https://readthedocs.org/projects/knut-app/badge/?version=latest)](https://knut-app.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/pearjo/knut-server/blob/master/LICENSE)
 
 # Knut App
