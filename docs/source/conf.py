@@ -14,8 +14,6 @@ import os
 import subprocess
 import sys
 
-from sphinx.builders.html import StandaloneHTMLBuilder
-
 # -- Project information -----------------------------------------------------
 
 project = 'Knut App Documentation'
@@ -72,7 +70,7 @@ html_theme_options = {
     'prev_next_buttons_location': 'bottom',
     'style_external_links': False,
     'vcs_pageview_mode': '',
-    'style_nav_header_background': '',
+    'style_nav_header_background': '#343131',
     # Toc options
     'collapse_navigation': True,
     'sticky_navigation': True,
@@ -88,7 +86,7 @@ html_static_path = ['_static']
 
 html_logo = '_static/knut.png'
 
-StandaloneHTMLBuilder.supported_image_types = ['image/svg+xml',
-                                               'image/gif',
-                                               'image/png',
-                                               'image/jpeg']
+
+# These paths are either relative to html_static_path
+# or fully qualified paths (eg. https://...)
+html_css_files = ['css/custom.css']

@@ -11,7 +11,6 @@ app to provide an user interface to the `Knut server
 
 .. image:: _static/app.png
    :align: center
-   :scale: 50 %
    :alt: screenshot of the app
 
 .. toctree::
