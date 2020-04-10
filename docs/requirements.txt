@@ -1,0 +1,4 @@
+# Requirements to build the documentation
+breathe
+doxyqml
+sphinx_rtd_theme

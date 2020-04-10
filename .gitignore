@@ -1,0 +1,12 @@
+# ignore build directories
+build/
+docs/build
+docs/doxygen/xml
+
+# ignore user files
+*.env
+*.pro.*
+
+# ignore files helpul for emacs
+compile_commands.json
+TAGS

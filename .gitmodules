@@ -1,0 +1,6 @@
+[submodule "fonts/roboto"]
+	path = fonts/roboto
+	url = https://github.com/google/roboto.git
+[submodule "fonts/weather-icons"]
+	path = fonts/weather-icons
+	url = https://github.com/erikflowers/weather-icons.git
