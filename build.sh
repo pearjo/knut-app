@@ -1,4 +1,18 @@
 #!/bin/bash
+# Copyright (C) 2020  Joe Pearson
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 help()
 {
@@ -15,6 +29,7 @@ help()
    echo "JAVA_HOME need to be set additionaly"
 }
 
+# options
 while getopts ":h" option; do
   case $option in
     h)
@@ -28,6 +43,7 @@ while getopts ":h" option; do
   esac
 done
 
+# get build target
 case "${1}" in
   android)
     TARGET="android"
@@ -43,8 +59,7 @@ case "${1}" in
     exit 1
 esac
 
-echo "Build the Knut app for the TARGET $TARGET."
-
+# run qmake for the specified target
 BUILD=build/$TARGET
 
 if [ -z "$QMAKE" ]
@@ -55,6 +70,9 @@ else
   mkdir -p $BUILD
   $QMAKE -o $BUILD
 fi
+
+# build the knut app for the target
+echo "Build the Knut app for the TARGET $TARGET."
 
 cd build/$TARGET
 
