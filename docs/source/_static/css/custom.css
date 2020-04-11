@@ -7,7 +7,6 @@
      --navbar-background-color-hover: #e3e3e3;
      --navbar-background-color: #efefef;
      --navbar-heading-color: #2f2f2f;
-     --navbar-level-1-color: #2f2f2f;
 
      --highlight-background-color: #f5ffe1;
      --highlight-comment-color: #408090;
@@ -157,31 +156,18 @@ legend,
 .wy-nav-top,
 .wy-nav-top a {
     background-color: var(--navbar-background-color);
-    color: var(--navbar-level-1-color);
-}
-
-.wy-menu-vertical a {
-    color: var(--navbar-level-1-color);
 }
 
 .wy-menu-vertical a:hover {
     background-color: var(--navbar-background-color-hover);
-    color: var(--navbar-level-1-color);
 }
 
 .wy-side-nav-search,
 .wy-menu-vertical a,
 .wy-menu-vertical a:active span.toctree-expand,
 .wy-menu-vertical li.toctree-l2 a:active span.toctree-expand {
-    color: var(--navbar-level-1-color);
+    color: var(--navbar-heading-color);
     opacity: 1;
-}
-
-.rst-versions a,
-.rst-versions .rst-current-version,
-.rst-versions .rst-current-version .fa,
-.rst-versions .rst-other-versions dd a {
-    color: var(--navbar-level-1-color);
 }
 
 .wy-side-nav-search > a:hover,
