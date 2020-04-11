@@ -30,7 +30,7 @@ ApplicationWindow {
     height: Theme.referenceHeight
     width: Theme.referenceWidth
 
-    color: Theme.background
+    color: "#000000"
     title: qsTr("Knut")
     visible: true
 
