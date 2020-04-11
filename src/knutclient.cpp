@@ -30,13 +30,17 @@ KnutClient::KnutClient(QObject *parent) :
     mHostAddress = mSettings.value(HOST_ADDRESS_SETTING, "").toString();
     mPort = mSettings.value(PORT_SETTING, 8080).toInt();
 
+    // set heartbeat timer
+    mHeartbeatTimer = new QTimer(this);
+    // wait by a factor of 1.1 longer for the heartbeat
+    mHeartbeatTimer->setInterval(1 / HEARTBEAT_FREQUENCY * 1100);
+    connect(mHeartbeatTimer, SIGNAL(timeout()), this, SLOT(mHeartbeatMissed()));
+
     mSocket.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
     connect(&mSocket, SIGNAL(error(QAbstractSocket::SocketError)),
             this, SLOT(mErrorHandler(QAbstractSocket::SocketError)));
     connect(&mSocket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
-    connect(&mSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-            this, SLOT(mStateChanged(QAbstractSocket::SocketState)));
 
     mConnectSocket();
 }
@@ -58,13 +62,17 @@ void KnutClient::mConnectSocket()
     mSocket.abort();
     mSocket.connectToHost(QHostAddress(mHostAddress), mPort);
 
-    if (mSocket.waitForConnected(mTimeout)) {
+    if (mSocket.waitForConnected(CONNECT_TIMEOUT)) {
         qDebug() << "Connected to host" << mHostAddress << "on port" << mPort;
+
+        if (!connected) {
+            connected = true;
+            emit connectedChanged();
+        }
+
         emit knutConnected();
     } else {
-        QTimer *timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(onReconnect()));
-        timer->start(mTimeout);
+        mHeartbeatTimer->start();
     }
 
     mConnectingToKnut = false;
@@ -98,32 +106,37 @@ void KnutClient::onReadyRead()
         // read message header
         in >> messageSize;
 
-        qDebug() << "Read" << messageSize << "bytes from socket...";
+        if (messageSize > 0) {
+            qDebug() << "Read" << messageSize << "bytes from socket...";
 
-        buffer = mSocket.read(messageSize);
+            buffer = mSocket.read(messageSize);
 
-        // read rest of the message if it's split in multiple packets
-        while (buffer.size() < int(messageSize)) {
-            mSocket.waitForReadyRead();
-            buffer.append(mSocket.read(messageSize - buffer.size()));
+            // read rest of the message if it's split in multiple packets
+            while (buffer.size() < int(messageSize)) {
+                mSocket.waitForReadyRead();
+                buffer.append(mSocket.read(messageSize - buffer.size()));
+            }
+
+            QJsonDocument dataDoc = QJsonDocument::fromJson(buffer);
+            QJsonObject data = dataDoc.object();
+            QJsonObject message = data["msg"].toObject();
+            serviceId = data["serviceId"].toInt();
+            messageId = data["msgId"].toInt();
+
+            // don't log the server's heartbeat
+            if (serviceId > 0 && messageId > 0) {
+                qDebug() << "Received for service"
+                         << serviceId
+                         << "the message"
+                         << messageId
+                         << message;
+                emit receivedMessage(message, serviceId, messageId);
+            }
+        } else if (messageSize == 0) {
+            // received a heartbeat
+            mHeartbeatTimer->start();
         }
-
-        QJsonDocument dataDoc = QJsonDocument::fromJson(buffer);
-        QJsonObject data = dataDoc.object();
-        QJsonObject message = data["msg"].toObject();
-        serviceId = data["serviceId"].toInt();
-        messageId = data["msgId"].toInt();
-
-        qDebug() << "Received for service" << serviceId << "the message" << messageId << message;
-
-        emit receivedMessage(message, serviceId, messageId);
     }
-}
-
-void KnutClient::onReconnect()
-{
-    if (!mConnectingToKnut)
-        mConnectSocket();
 }
 
 //! Changes the \a hostAddress to which the KnutClient is bound and reconnects to it.
@@ -227,21 +240,26 @@ void KnutClient::mErrorHandler(const QAbstractSocket::SocketError &socketError)
     qDebug() << "Socket error: " << socketError;
 }
 
-//! Handles a state change of the socket and reconnects if needed.
-void KnutClient::mStateChanged(const QAbstractSocket::SocketState &socketState)
+/*! \brief This slot is called if no heartbeat is received.
+ *
+ *  If no heartbeat is received from the Knut server, this slot is called. The connection state is
+ *  set to \c false, the socket is disconnected and a reconnect to the server is attempted.
+ *
+ *  \sa mConnectSocket()
+ */
+void KnutClient::mHeartbeatMissed()
 {
-    switch (socketState) {
-        case QAbstractSocket::SocketState::ConnectedState:
-            connected = true;
-            connectedChanged();
-            break;
-        case QAbstractSocket::SocketState::UnconnectedState:
-            connected = false;
-            connectedChanged();
-            if (!mConnectingToKnut)
-                mConnectSocket();
-            break;
-        default:
-            break;
+    qWarning("Heartbeat missed");
+
+    if (connected) {
+        connected = false;
+        emit connectedChanged();
     }
+
+    if (mSocket.state() != QAbstractSocket::SocketState::UnconnectedState)
+        mSocket.disconnectFromHost();
+
+    mConnectSocket();
+
+    mHeartbeatTimer->start();
 }

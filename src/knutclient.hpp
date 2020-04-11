@@ -20,7 +20,10 @@
 #include <QObject>
 #include <QSettings>
 #include <QTcpSocket>
+#include <QTimer>
 
+#define CONNECT_TIMEOUT 10000
+#define HEARTBEAT_FREQUENCY 0.25
 #define HOST_ADDRESS_SETTING "knutClient/hostAddress"
 #define PORT_SETTING "knutClient/port"
 
@@ -78,19 +81,18 @@ signals:
                          const quint16 &messageId);
 
 private slots:
-    void mStateChanged(const QAbstractSocket::SocketState &socketState);
+    void mHeartbeatMissed();
 
 public slots:
     void onReadyRead();
-    void onReconnect();
 
 private:
     QSettings mSettings;
     QString mHostAddress;
     QTcpSocket mSocket;
+    QTimer *mHeartbeatTimer;
     bool mConnectingToKnut = false;
     int mPort;
-    int mTimeout = 10000;
     void mConnectSocket();
     void mErrorHandler(const QAbstractSocket::SocketError &socketError);
 };

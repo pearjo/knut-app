@@ -21,7 +21,7 @@ copyright = '2019-2020, Joe Pearson'
 author = 'Joe Pearson'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '0.1.0'
 
 
 # -- General configuration ---------------------------------------------------

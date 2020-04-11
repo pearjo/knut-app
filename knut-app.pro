@@ -1,5 +1,5 @@
 # The version number of the Knut app following the semver scheme.
-VERSION = 0.0.1
+VERSION = 0.1.0
 
 QT += quick qml network gui widgets charts svg
 CONFIG += c++11 console
@@ -17,6 +17,18 @@ DEFINES += \
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+INCLUDEPATH += \
+    $$PWD/src \
+    $$PWD/src/services
+
+HEADERS += \
+    $$PWD/src/*.hpp \
+    $$PWD/src/services/*.hpp
+
+SOURCES += \
+    $$PWD/src/*.cpp \
+    $$PWD/src/services/*.cpp
 
 RESOURCES += \
     $$files($$PWD/fonts/roboto/src/hinted/*.ttf) \
@@ -58,18 +70,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-sources
 android {
     ANDROID_VERSION_NAME = $$VERSION
 }
-
-INCLUDEPATH += \
-    $$PWD/src \
-    $$PWD/src/services
-
-HEADERS += \
-    $$PWD/src/*.hpp \
-    $$PWD/src/services/*.hpp
-
-SOURCES += \
-    $$PWD/src/*.cpp \
-    $$PWD/src/services/*.cpp
 
 desktop.files += knut-app.desktop
 desktop.path = ~/.local/share/applications
