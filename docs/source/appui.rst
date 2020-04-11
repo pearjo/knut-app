@@ -5,8 +5,8 @@ App UI
 
 The user interface of the Knut app is written in QML. Each item is designed in
 such a way, that it can be viewed using ``qmlscene``. Data models that might be
-provided by the _applogic are mocked by dummy models in the `qml/dummydata`
-directory.
+provided by the :ref:`applogic` are mocked by dummy models in the
+`qml/dummydata` directory.
 
 For example, to view the :cpp:class:`LightControl` item, you would run from the
 `qml` directory::
