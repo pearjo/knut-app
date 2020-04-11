@@ -37,10 +37,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    // set default font
-    QFont font(QStringLiteral("Roboto"), 12);
-    app.setFont(font);
-
     KnutClient knutClient;
 
     // initialize services

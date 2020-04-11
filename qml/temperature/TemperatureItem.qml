@@ -136,7 +136,9 @@ FocusScope {
                     opacity: 0.5
                     text: {
                         if (!!temperature.condition) {
-                            return ("<span style=\"font-family:Weather Icons;\">"
+                            return ("<span style=\"font-family:"
+                                    + Theme.typefaceWeatherIcon.name
+                                    + ";\">"
                                     + temperature.condition
                                     + "</span> • "
                                     + root.info)
@@ -241,11 +243,6 @@ FocusScope {
     Connections {
         target: temperature
         onTimeHistoryChanged: temperatureChart.updateSeries()
-    }
-
-    FontLoader {
-        id: weatherIconsFont
-        source: "../../fonts/weather-icons/font/weathericons-regular-webfont.ttf"
     }
 
     onActiveFocusChanged: !activeFocus ? state = "closed" : undefined

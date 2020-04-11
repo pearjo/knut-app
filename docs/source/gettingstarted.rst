@@ -8,8 +8,26 @@ Getting Started
 Build
 -----
 
-The Knut app is powered by the Qt framework and requires Qt 5.14. The app is
-build using the ``qmake`` build tool by running from the project root directory::
+The Knut app is powered by the Qt framework and requires Qt 5.14. Before
+building the app, some fonts required by the :ref:`appui` should be downloaded
+first.  Those are the `Noto Sans <https://www.google.com/get/noto/>`_, `Roboto
+Condensed <https://fonts.google.com/specimen/Roboto+Condensed>`_ and the
+`Weather Icons <https://github.com/erikflowers/weather-icons>`_ font. The UI
+expects them to be found in the following directories::
+
+   fonts/
+   ├── noto
+   │   └── NotoSans-Regular.ttf
+   ├── roboto
+   │   └── RobotoCondensed-Regular.ttf
+   └── weather-icons
+       └── weathericons-regular-webfont.ttf
+
+To make life easy, you can simply run ``./build.sh -f`` to install all needed
+fonts.
+
+The app is build using the ``qmake`` build tool by running from the project root
+directory::
 
    mkdir build
    qmake -o build/

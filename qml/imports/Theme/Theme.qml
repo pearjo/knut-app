@@ -38,7 +38,7 @@ QtObject {
     property font fontH1
     fontH1 {
         capitalization: Font.MixedCase
-        family: typefaceHeader
+        family: typefaceHeader.name
         letterSpacing: -1.5
         pixelSize: 96
         weight: Font.Light
@@ -46,7 +46,7 @@ QtObject {
     property font fontH2
     fontH2 {
         capitalization: Font.MixedCase
-        family: typefaceHeader
+        family: typefaceHeader.name
         letterSpacing: -0.5
         pixelSize: 60
         weight: Font.Light
@@ -54,7 +54,7 @@ QtObject {
     property font fontH3
     fontH3 {
         capitalization: Font.MixedCase
-        family: typefaceHeader
+        family: typefaceHeader.name
         letterSpacing: 0
         pixelSize: 48
         weight: Font.Normal
@@ -62,7 +62,7 @@ QtObject {
     property font fontH4
     fontH4 {
         capitalization: Font.MixedCase
-        family: typefaceHeader
+        family: typefaceHeader.name
         letterSpacing: 0.25
         pixelSize: 34
         weight: Font.Normal
@@ -70,7 +70,7 @@ QtObject {
     property font fontH5
     fontH5 {
         capitalization: Font.AllUppercase
-        family: typefaceHeader
+        family: typefaceHeader.name
         letterSpacing: 0.15
         pixelSize: 20
         weight: Font.Normal
@@ -78,7 +78,7 @@ QtObject {
     property font fontH6
     fontH6 {
         capitalization: Font.MixedCase
-        family: typefaceBody
+        family: typefaceBody.name
         letterSpacing: 0.15
         pixelSize: 20
         weight: Font.Medium
@@ -86,7 +86,7 @@ QtObject {
     property font fontSubtitle1
     fontSubtitle1 {
         capitalization: Font.MixedCase
-        family: typefaceBody
+        family: typefaceBody.name
         letterSpacing: 0.15
         pixelSize: 16
         weight: Font.Normal
@@ -94,7 +94,7 @@ QtObject {
     property font fontSubtitle2
     fontSubtitle2 {
         capitalization: Font.MixedCase
-        family: typefaceBody
+        family: typefaceBody.name
         letterSpacing: 0.1
         pixelSize: 14
         weight: Font.Medium
@@ -102,7 +102,7 @@ QtObject {
     property font fontBody1
     fontBody1 {
         capitalization: Font.MixedCase
-        family: typefaceBody
+        family: typefaceBody.name
         letterSpacing: 0.5
         pixelSize: 16
         weight: Font.Normal
@@ -110,7 +110,7 @@ QtObject {
     property font fontBody2
     fontBody2 {
         capitalization: Font.MixedCase
-        family: typefaceBody
+        family: typefaceBody.name
         letterSpacing: 0.25
         pixelSize: 14
         weight: Font.Normal
@@ -118,7 +118,7 @@ QtObject {
     property font fontButton
     fontButton {
         capitalization: Font.AllUppercase
-        family: typefaceHeader
+        family: typefaceHeader.name
         letterSpacing: 1.25
         pixelSize: 14
         weight: Font.Light
@@ -126,7 +126,7 @@ QtObject {
     property font fontCaption
     fontCaption {
         capitalization: Font.MixedCase
-        family: typefaceHeader
+        family: typefaceHeader.name
         letterSpacing: 0.4
         pixelSize: 12
         weight: Font.Normal
@@ -134,13 +134,21 @@ QtObject {
     property font fontOverline
     fontOverline {
         capitalization: Font.AllUppercase
-        family: typefaceHeader
+        family: typefaceHeader.name
         letterSpacing: 1.5
         pixelSize: 10
         weight: Font.Normal
     }
-    property string typefaceBody: "Noto Sans"
-    property string typefaceHeader: "Roboto Condensed"
+
+    readonly property FontLoader typefaceBody: FontLoader {
+        source: "../../../fonts/noto/NotoSans-Regular.ttf"
+    }
+    readonly property FontLoader typefaceHeader: FontLoader {
+        source: "../../../fonts/roboto/RobotoCondensed-Regular.ttf"
+    }
+    readonly property FontLoader typefaceWeatherIcon: FontLoader {
+        source: "../../../fonts/weather-icons/weathericons-regular-webfont.ttf"
+    }
 
     // general
     /* readonly property color accent: "#D5A56B" */

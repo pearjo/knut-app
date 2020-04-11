@@ -51,7 +51,7 @@ Item {
                 verticalCenter: parent.verticalCenter
             }
 
-            font.family: "Weather Icons"
+            font.family: Theme.typefaceWeatherIcon.name
             font.pixelSize: 24
             horizontalAlignment: Text.AlignHCenter
             text: temperatureClient.localWeather.condition
@@ -93,10 +93,5 @@ Item {
                    + "<font size=\"2\">"
                    + temperatureClient.localWeather.unit + "</font>")
         }
-    }
-
-    FontLoader {
-        id: weatherIconsFont
-        source: "../../fonts/weather-icons/font/weathericons-regular-webfont.ttf"
     }
 }

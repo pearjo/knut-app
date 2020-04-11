@@ -31,8 +31,9 @@ SOURCES += \
     $$PWD/src/services/*.cpp
 
 RESOURCES += \
-    $$files($$PWD/fonts/roboto/src/hinted/*.ttf) \
-    $$files($$PWD/fonts/weather-icons/font/*.ttf) \
+    $$files($$PWD/fonts/noto/*.ttf) \
+    $$files($$PWD/fonts/roboto/*.ttf) \
+    $$files($$PWD/fonts/weather-icons/*.ttf) \
     $$files($$PWD/images/*.svg) \
     $$files($$PWD/images/icons/*.svg) \
     $$files($$PWD/qml/*.qml) \
