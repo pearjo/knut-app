@@ -36,7 +36,7 @@ Item {
             bottomMargin: Theme.verticalMargin
         }
 
-        color: Theme.background
+        color: Theme.backgroundElevated
         radius: Theme.radius
 
         Text {
