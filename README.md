@@ -44,7 +44,7 @@ running ``pip install -r requirements.txt`` from within the *docs*
 directory. After that you can run
 
 ```bash
-make html
+READTHEDOCS='True' make html
 ```
 
 from within the *docs* directory. This builds the documentation with
