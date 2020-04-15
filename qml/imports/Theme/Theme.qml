@@ -78,7 +78,7 @@ QtObject {
     property font fontH6
     fontH6 {
         capitalization: Font.MixedCase
-        family: typefaceBody.name
+        family: typefaceHeader.name
         letterSpacing: 0.15
         pixelSize: 20
         weight: Font.Medium
