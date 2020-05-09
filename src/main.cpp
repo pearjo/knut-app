@@ -21,6 +21,7 @@
 
 #include "knutclient.hpp"
 #include "services/lightClient.hpp"
+#include "services/task.hpp"
 #include "services/temperatureClient.hpp"
 
 #ifndef APP_VERSION
@@ -36,6 +37,9 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
+    // register Task to access enums
+    qmlRegisterUncreatableType<Task>("Knut", 1, 0, "KnutTask", "Type Task is uncreatable");
 
     KnutClient knutClient;
 
