@@ -19,6 +19,7 @@ more information about the message format of each service.
    :caption: Code Documentation
 
    reference/knutclient
+   reference/knuthelper
    reference/lightservice
    reference/taskservice
    reference/temperatureservice

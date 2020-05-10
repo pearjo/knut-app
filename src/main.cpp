@@ -20,6 +20,7 @@
 #include <QFont>
 
 #include "knutclient.hpp"
+#include "knutHelper.hpp"
 #include "services/lightClient.hpp"
 #include "services/task.hpp"
 #include "services/taskClient.hpp"
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Task>("Knut", 1, 0, "KnutTask", "Type Task is uncreatable");
 
     KnutClient knutClient;
+    KnutHelper knutHelper;
 
     // initialize services
     LightClient lightClient;
@@ -56,6 +58,8 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty(QStringLiteral("knutClient"),
                                              &knutClient);
+    engine.rootContext()->setContextProperty(QStringLiteral("knutHelper"),
+                                             &knutHelper);
     engine.rootContext()->setContextProperty(QStringLiteral("lightClient"),
                                              &lightClient);
     engine.rootContext()->setContextProperty(QStringLiteral("taskClient"),
