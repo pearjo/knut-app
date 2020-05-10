@@ -22,6 +22,7 @@
 #include "knutclient.hpp"
 #include "services/lightClient.hpp"
 #include "services/task.hpp"
+#include "services/taskClient.hpp"
 #include "services/temperatureClient.hpp"
 
 #ifndef APP_VERSION
@@ -47,6 +48,9 @@ int main(int argc, char *argv[])
     LightClient lightClient;
     lightClient.connectToClient(&knutClient);
 
+    TaskClient taskClient;
+    taskClient.connectToClient(&knutClient);
+
     TemperatureClient temperatureClient;
     temperatureClient.connectToClient(&knutClient);
 
@@ -54,6 +58,8 @@ int main(int argc, char *argv[])
                                              &knutClient);
     engine.rootContext()->setContextProperty(QStringLiteral("lightClient"),
                                              &lightClient);
+    engine.rootContext()->setContextProperty(QStringLiteral("taskClient"),
+                                             &taskClient);
     engine.rootContext()->setContextProperty(QStringLiteral("temperatureClient"),
                                              &temperatureClient);
 

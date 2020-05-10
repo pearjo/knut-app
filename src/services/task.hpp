@@ -23,7 +23,8 @@
 
 /*! \brief An implementation of the Knut task service.
  *
- *  This class implements the <a href="https://knut-server.readthedocs.io/en/latest/reference/knutservices.html#knutservices.Task">
+ *  This class implements the <a
+ *  href="https://knut-server.readthedocs.io/en/latest/reference/knutservices.html#knutservices.Task">
  *  Knut task service</a> and communicates any changes through the KnutClient \a client to the Knut
  *  server.
  */
@@ -102,14 +103,17 @@ public:
     void setTitle(const QString &title);
 
 signals:
+    // property notifiers
     void assigneeChanged();
     void bodyChanged();
     void doneChanged();
     void dueChanged();
     void dueTypeChanged();
-    void remind();
     void reminderChanged();
     void titleChanged();
+
+    //! This signal is emitted when a reminder message is received from the Knut server.
+    void remind();
 
 private:
     void updateDueType();
