@@ -39,7 +39,8 @@ Item {
             bottomMargin: addButton.anchors.bottomMargin
         }
 
-        clip: true
+        clip: false
+        displayMarginEnd: addButton.height
         model: !!taskClient ? taskClient.taskModel : undefined
 
         delegate: Task.Task {
