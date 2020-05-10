@@ -106,6 +106,9 @@ Item {
         Popup {
             id: popup
 
+            height: 0.8 * parent.height
+            width: 0.8 * parent.width
+
             anchors.centerIn: parent
 
             background: Rectangle { anchors.fill: parent; color: "transparent" }
