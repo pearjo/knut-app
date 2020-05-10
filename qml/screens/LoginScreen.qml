@@ -84,7 +84,7 @@ Rectangle {
         }
     }
 
-    Knut.TextButton {
+    Knut.Button {
         id: button
 
         text: qsTr("Connect")

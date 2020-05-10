@@ -102,13 +102,6 @@ Item {
             }
         }
 
-        Knut.Divider {
-            id: divider
-
-            anchors.left: parent.left
-            anchors.right: parent.right
-        }
-
         Repeater {
             id: roomRepeater
 

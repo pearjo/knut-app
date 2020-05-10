@@ -23,7 +23,7 @@
 #include <QTimer>
 
 #define CONNECT_TIMEOUT 10000
-#define HEARTBEAT_FREQUENCY 0.25
+#define HEARTBEAT_FREQUENCY 1
 #define HOST_ADDRESS_SETTING "knutClient/hostAddress"
 #define PORT_SETTING "knutClient/port"
 
@@ -42,8 +42,10 @@ class KnutClient : public QObject
 
     //! Indicates whether the KnutClient is connected to the Knut server.
     Q_PROPERTY(bool connected MEMBER connected NOTIFY connectedChanged);
+
     //! The address to which the Knut server is bound.
     Q_PROPERTY(QString hostAddress READ hostAddress WRITE setHostAddress NOTIFY hostAddressChanged)
+
     //! The port on which the Knut server can be accessed.
     Q_PROPERTY(int port READ port WRITE setPort NOTIFY portChanged)
 

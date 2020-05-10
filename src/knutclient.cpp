@@ -32,8 +32,8 @@ KnutClient::KnutClient(QObject *parent) :
 
     // set heartbeat timer
     mHeartbeatTimer = new QTimer(this);
-    // wait by a factor of 1.1 longer for the heartbeat
-    mHeartbeatTimer->setInterval(1 / HEARTBEAT_FREQUENCY * 1100);
+    // wait by a factor of 2 longer for the heartbeat
+    mHeartbeatTimer->setInterval(1 / HEARTBEAT_FREQUENCY * 2000);
     connect(mHeartbeatTimer, SIGNAL(timeout()), this, SLOT(mHeartbeatMissed()));
 
     mSocket.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
@@ -47,6 +47,7 @@ KnutClient::KnutClient(QObject *parent) :
 
 KnutClient::~KnutClient()
 {
+    delete mHeartbeatTimer;
 }
 
 //! Connects the KnutClient to the socket.
