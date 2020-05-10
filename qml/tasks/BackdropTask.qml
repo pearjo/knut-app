@@ -143,7 +143,7 @@ Item {
                     horizontalAlignment: Text.AlignRight
                     text: {
                         if (secsToDue > 86400) {
-                            var days = Math.floor(s / 86400);
+                            var days = Math.floor(secsToDue / 86400);
                             return (days
                                     + unitString(qsTr(days > 1 ? "days"
                                                                : "day")));
@@ -194,6 +194,8 @@ Item {
                     }
 
                     transitions: Transition {
+                        to: "overdue"
+
                         AnchorAnimation {
                             duration: 2000
                             easing.type: Easing.OutElastic
