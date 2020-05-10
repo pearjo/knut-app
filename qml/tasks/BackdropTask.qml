@@ -74,7 +74,7 @@ Item {
 
                 anchors.verticalCenter: parent.verticalCenter
 
-                source: "../../images/icons/other/material/list-24px.svg"
+                source: "../../images/icons/task.svg"
                 color: Theme.accent
             }
 

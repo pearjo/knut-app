@@ -47,7 +47,7 @@ ApplicationWindow {
         currentIndex: swipeView.currentIndex
         model: ["../../images/icons/lamp.svg",
                 "../../images/icons/temperature.svg",
-                "../../images/icons/other/material/list-24px.svg"]
+                "../../images/icons/task.svg"]
     }
 
     SwipeView {
