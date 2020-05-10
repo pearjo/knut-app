@@ -20,6 +20,7 @@ import Theme 1.0
 
 import "." as Knut
 import "../lights" as Lights
+import "../tasks" as Tasks
 import "../temperature" as Temperature
 
 /*! \brief Displays the app's top bar.
@@ -31,14 +32,19 @@ import "../temperature" as Temperature
 Item {
     id: root
 
-    /// Defines whether the backdrop is open or not
+    //! Defines whether the backdrop is open or not
     property bool backdropOpen: false
-    /// Size of the TabBar icon buttons
+
+    //! Size of the TabBar icon buttons
     property real buttonSize: 24
-    /// The current TabBar index
+
+    //! The current TabBar index
     property alias currentIndex: bar.currentIndex
 
-    implicitHeight: topItem.height + backdrop.height
+    //! The model with the tab bar icon sources.
+    property alias model: barRepeater.model
+
+    implicitHeight: backdropOpen ? rootColumn.height : topItem.height
     implicitWidth: Theme.referenceWidth
 
     Rectangle {
@@ -51,106 +57,112 @@ Item {
         Rectangle { anchors.fill: parent; color: Theme.darkLayer }
     }
 
-    Item {
-        id: topItem
 
-        implicitHeight: 56
+    Column {
+        id: rootColumn
 
-        anchors {
-            left: parent.left
-            leftMargin: Theme.horizontalMargin
-            right: parent.right
-            rightMargin: Theme.horizontalMargin
-            top: parent.top
-        }
+        height: childrenRect.height
+        width: parent.width
 
-        Knut.AnimatedIconButton {
-            id: backdropButton
+        Item {
+            id: topItem
 
-            implicitHeight: parent.height
-            implicitWidth: height
+            implicitHeight: 56
 
             anchors {
                 left: parent.left
-                verticalCenter: parent.verticalCenter
-            }
-
-            bottomColor: Theme.foreground
-            bottomSource: "../../images/icons/knut.svg"
-            iconSize: root.buttonSize
-            topColor: Theme.accent
-            topSource: "../../images/icons/close.svg"
-
-            Component.onCompleted: state = root.backdropOpen ? "top"
-                                                             : "bottom"
-
-            onClicked: root.backdropOpen = !root.backdropOpen
-        }
-
-        TabBar {
-            id: bar
-
-            implicitHeight: parent.height // root.buttonSize
-
-            anchors {
-                left: backdropButton.right
+                leftMargin: Theme.horizontalMargin
                 right: parent.right
-                verticalCenter: parent.verticalCenter
+                rightMargin: Theme.horizontalMargin
             }
 
-            background: Rectangle { opacity: 0 }
+            Knut.AnimatedIconButton {
+                id: backdropButton
 
-            Repeater {
-                model: ["../../images/icons/lamp.svg",
-                        "../../images/icons/temperature.svg"]
+                implicitHeight: parent.height
+                implicitWidth: height
 
-                delegate: TabButton {
-                    id: tabButton
+                anchors {
+                    left: parent.left
+                    verticalCenter: parent.verticalCenter
+                }
 
-                    anchors.verticalCenter: parent.verticalCenter
+                bottomColor: Theme.foreground
+                bottomSource: "../../images/icons/knut.svg"
+                iconSize: root.buttonSize
+                topColor: Theme.accent
+                topSource: "../../images/icons/close.svg"
 
-                    icon {
-                        height: root.buttonSize
+                Component.onCompleted: state = root.backdropOpen ? "top"
+                    : "bottom"
 
-                        color: (bar.currentIndex === index) ? Theme.accent
-                                                            : Theme.foreground
-                        source: modelData
+                onClicked: root.backdropOpen = !root.backdropOpen
+            }
+
+            TabBar {
+                id: bar
+
+                implicitHeight: parent.height
+
+                anchors {
+                    left: backdropButton.right
+                    right: parent.right
+                    verticalCenter: parent.verticalCenter
+                }
+
+                background: Rectangle { opacity: 0 }
+
+                Repeater {
+                    id: barRepeater
+
+                    delegate: TabButton {
+                        id: tabButton
+
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        icon {
+                            height: root.buttonSize
+
+                            color: (bar.currentIndex === index) ? Theme.accent
+                                : Theme.foreground
+                            source: modelData
+                        }
+
+                        background: Rectangle { opacity: 0 }
+                        opacity: bar.currentIndex === index ? 1.0 : Theme.opacity
                     }
-
-                    background: Rectangle { opacity: 0 }
-                    opacity: bar.currentIndex === index ? 1.0 : Theme.opacity
                 }
             }
         }
-    }
 
-    Item {
-        id: backdrop
+        Item {
+            id: backdrop
 
-        implicitHeight: backdropColumn.height
-
-        anchors {
-            left: parent.left
-            right: parent.right
-            top: topItem.bottom
-        }
-
-        clip: true
-
-        Column {
-            id: backdropColumn
+            implicitHeight: backdropColumn.height
 
             anchors {
                 left: parent.left
                 right: parent.right
-                top: parent.top
             }
 
-            bottomPadding: Theme.verticalMargin
-            topPadding: Theme.verticalMargin
+            clip: true
 
-            Temperature.BackdropLocalWeather { width: parent.width }
-            Lights.BackdropLightControl { width: parent.width }
+            Column {
+                id: backdropColumn
+
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: parent.top
+                }
+
+                bottomPadding: Theme.verticalMargin
+                topPadding: Theme.verticalMargin
+
+                Tasks.BackdropTask { width: parent.width }
+                Temperature.BackdropLocalWeather { width: parent.width }
+                Lights.BackdropLightControl { width: parent.width }
+            }
         }
     }
 
@@ -160,8 +172,8 @@ Item {
             when: !backdropOpen
 
             PropertyChanges {
-                target: backdrop
-                height: 0
+                target: root
+                height: topItem.height
             }
         },
         State {
@@ -169,20 +181,16 @@ Item {
             when: backdropOpen
 
             PropertyChanges {
-                target: backdrop
+                target: root
                 height: implicitHeight
             }
         }
     ]
 
-    transitions: [
-        Transition {
-            PropertyAnimation {
-                duration: Theme.animationDuration
-                easing.type: Easing.InOutCubic
-                properties: "height"
-                target: backdrop
-            }
+    Behavior on height {
+        NumberAnimation {
+            duration: Theme.animationDuration
+            easing.type: Easing.OutCubic
         }
-    ]
+    }
 }

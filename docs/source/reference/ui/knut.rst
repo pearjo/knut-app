@@ -29,6 +29,10 @@ and the close icon as bottom icon:
    :project: knut-app
    :members:
 
+.. doxygenclass:: DateTimePicker
+   :project: knut-app
+   :members:
+
 .. doxygenclass:: Divider
    :project: knut-app
    :members:

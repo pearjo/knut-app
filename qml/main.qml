@@ -20,6 +20,7 @@ import QtQuick.Controls 2.14
 import "knut" as Knut
 import "lights" as Lights
 import "screens" as Screens
+import "tasks" as Tasks
 import "temperature" as Temperature
 
 import Theme 1.0
@@ -44,6 +45,9 @@ ApplicationWindow {
         }
 
         currentIndex: swipeView.currentIndex
+        model: ["../../images/icons/lamp.svg",
+                "../../images/icons/temperature.svg",
+                "../../images/icons/other/material/list-24px.svg"]
     }
 
     SwipeView {
@@ -62,6 +66,7 @@ ApplicationWindow {
 
         Lights.LightList {}
         Temperature.TemperatureList {}
+        Tasks.TaskList {}
     }
 
     Screens.LoadingScreen { id: loadingScreen; anchors.fill: parent }

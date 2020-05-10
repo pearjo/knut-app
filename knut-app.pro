@@ -1,5 +1,5 @@
 # The version number of the Knut app following the semver scheme.
-VERSION = 0.1.0
+VERSION = 0.2.0
 
 QT += quick qml network gui widgets charts svg
 CONFIG += c++11 console
@@ -36,11 +36,14 @@ RESOURCES += \
     $$files($$PWD/fonts/weather-icons/*.ttf) \
     $$files($$PWD/images/*.svg) \
     $$files($$PWD/images/icons/*.svg) \
+    $$files($$PWD/images/icons/other/markdown-mark/*.svg) \
+    $$files($$PWD/images/icons/other/material/*.svg) \
     $$files($$PWD/qml/*.qml) \
     $$files($$PWD/qml/imports/*) \
     $$files($$PWD/qml/knut/*.qml) \
     $$files($$PWD/qml/lights/*.qml) \
     $$files($$PWD/qml/screens/*.qml) \
+    $$files($$PWD/qml/tasks/*.qml) \
     $$files($$PWD/qml/temperature/*.qml)
 
 # Additional import path used to resolve QML modules in Qt Creator's code model

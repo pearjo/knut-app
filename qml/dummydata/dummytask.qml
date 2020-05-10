@@ -13,40 +13,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtGraphicalEffects 1.14
 import QtQuick 2.14
+import Knut 1.0
 
-//! \brief Overlays a \a source icon with a custom \a color overlay.
-Item {
+QtObject {
     id: root
 
-    //! The icon color.
-    property alias color: colorOverlay.color
-    //! The icon Image.
-    property alias icon: svgIcon
-    //! The URL of the icon.
-    property alias source: svgIcon.source
+    property bool done: false
+    property string assignee: "John"
+    property string author: "Bob"
+    property string body: "- [x] get some cheese at the supermarket."
+    property string title: "Buy cheese"
+    property var due: new Date(Date.now() + 60000) // due in one minute
+    property int dueType: KnutTask.Today
+    property var reminder: new Date(Date.now() + 5000) // remind in 5 seconds
+    readonly property string uid: "12345"
 
-    implicitHeight: 40
-    implicitWidth: 40
-
-    Image {
-        id: svgIcon
-
-        anchors.fill: parent
-
-        antialiasing: true
-        sourceSize.height: height
-        sourceSize.width: width
-        visible: false
-    }
-
-    ColorOverlay{
-        id: colorOverlay
-
-        anchors.fill: svgIcon
-
-        antialiasing: true
-        source: svgIcon
-    }
+    signal remind
 }

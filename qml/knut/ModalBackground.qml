@@ -15,38 +15,27 @@
  */
 import QtGraphicalEffects 1.14
 import QtQuick 2.14
+import QtQuick.Controls 2.14
+import Theme 1.0
 
-//! \brief Overlays a \a source icon with a custom \a color overlay.
+//! A item that displays a blurred and dimmed modal background.
 Item {
     id: root
 
-    //! The icon color.
-    property alias color: colorOverlay.color
-    //! The icon Image.
-    property alias icon: svgIcon
-    //! The URL of the icon.
-    property alias source: svgIcon.source
-
-    implicitHeight: 40
-    implicitWidth: 40
-
-    Image {
-        id: svgIcon
-
+    FastBlur {
         anchors.fill: parent
 
-        antialiasing: true
-        sourceSize.height: height
-        sourceSize.width: width
-        visible: false
+        radius: 32
+        source: !!ApplicationWindow.window ? ApplicationWindow.window.contentItem
+                                           : null
     }
 
-    ColorOverlay{
-        id: colorOverlay
+    Rectangle { anchors.fill: parent; color: Theme.darkLayer }
 
-        anchors.fill: svgIcon
-
-        antialiasing: true
-        source: svgIcon
+    Behavior on opacity {
+        NumberAnimation {
+            easing.type: Easing.OutCubic
+            duration: Theme.animationDuration
+        }
     }
 }

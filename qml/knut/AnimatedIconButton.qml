@@ -120,26 +120,14 @@ MouseArea {
         }
     ]
 
-    transitions: [
-        Transition {
-            from: "bottom"
-            to: "top"
-            /* target: iconColumn */
+    transitions: Transition {
+        from: "bottom"
+        to: "top"
+        reversible: true
 
-            AnchorAnimation {
-                duration: Theme.animationDuration
-                easing.type: Easing.InOutCubic
-            }
-        },
-        Transition {
-            from: "top"
-            to: "bottom"
-            /* target: iconColumn */
-
-            AnchorAnimation {
-                duration: Theme.animationDuration
-                easing.type: Easing.InOutCubic
-            }
+        AnchorAnimation {
+            duration: Theme.animationDuration
+            easing.type: Easing.InOutCubic
         }
-    ]
+    }
 }

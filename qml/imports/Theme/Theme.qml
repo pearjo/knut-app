@@ -29,7 +29,7 @@ QtObject {
 
     // dimensions
     readonly property real horizontalItemSpace: 8
-    readonly property real radius: 8
+    readonly property real radius: 4
     readonly property real referenceHeight: 812
     readonly property real referenceWidth: 375
     readonly property real verticalItemSpace: 8
@@ -155,6 +155,7 @@ QtObject {
     readonly property color accent: "#FFC68A"
     readonly property color background: "#2F2F2F"
     readonly property color backgroundElevated: "#212121"
+    readonly property color brightLayer: "#2FFFFFFF"
     readonly property color darkLayer: "#80000000"
     readonly property color foreground: "#FAFAFA"
     readonly property color foregroundPressed: "#FAFAFA"
@@ -175,4 +176,8 @@ QtObject {
     readonly property color textAccent: accent
     readonly property color textBackground: background
     readonly property color textForeground: foreground
+    readonly property color textDisabled: Qt.rgba(foreground.r,
+                                                  foreground.g,
+                                                  foreground.b,
+                                                  0.5)
 }

@@ -17,18 +17,30 @@ import QtQuick 2.14
 
 import Theme 1.0
 
-Item {
+Rectangle {
     id: root
 
-    property bool checkable: false
-    property bool checked: false
+    //! This property holds the text displayed within the button.
     property string text: qsTr("Button")
 
+    //! Emitted when the button is clicked.
     signal clicked()
 
     implicitHeight: 36
     implicitWidth: Math.max(64, (buttonText.contentWidth
                                  + 2 * Theme.horizontalMargin))
+
+    color: Theme.background
+    radius: Theme.radius
+
+    Rectangle {
+        id: darkOverlay
+
+        anchors.fill: parent
+
+        color: Theme.darkLayer
+        radius: parent.radius
+    }
 
     Text {
         id: buttonText
@@ -41,8 +53,7 @@ Item {
             topMargin: Theme.verticalMargin
         }
 
-        color: root.checkable && root.checked ? Theme.textAccent
-                                              : Theme.textForeground
+        color: Theme.textForeground
         font: Theme.fontButton
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter

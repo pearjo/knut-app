@@ -17,36 +17,31 @@ import QtQuick 2.14
 
 import Theme 1.0
 
+import "." as Knut
+
 Item {
     id: root
 
     property bool checkable: false
     property bool checked: false
-    property string text: qsTr("Button")
+    property alias source: buttonIcon.source
 
     signal clicked()
 
-    implicitHeight: 36
-    implicitWidth: Math.max(64, (buttonText.contentWidth
-                                 + 2 * Theme.horizontalMargin))
+    implicitHeight: 48
+    implicitWidth: 48
 
-    Text {
-        id: buttonText
+    Knut.ColorIcon {
+        id: buttonIcon
 
         anchors {
             fill: parent
-            bottomMargin: Theme.verticalMargin
-            leftMargin: Theme.horizontalMargin
-            rightMargin: Theme.horizontalMargin
-            topMargin: Theme.verticalMargin
+            margins: 12
         }
 
-        color: root.checkable && root.checked ? Theme.textAccent
-                                              : Theme.textForeground
-        font: Theme.fontButton
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        text: root.text
+        color: root.checkable && root.checked ? Theme.accent
+            : Theme.foreground
+        icon.fillMode: Image.PreserveAspectFit
     }
 
     MouseArea {
