@@ -305,8 +305,6 @@ FocusScope {
 
     Task.DeletePopup {
         id: deletePopup
-
-        width: parent.width * 0.8
         task: root.task
     }
 

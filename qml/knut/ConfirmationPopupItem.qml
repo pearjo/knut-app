@@ -26,10 +26,8 @@ Item {
 
     signal clicked(bool ok)
 
-    implicitHeight: (2 * confirmationText.contentHeight
-                     + 2 * Theme.verticalMargin
-                     + buttonRow.height)
-    implicitWidth: 0.6 * Theme.referenceWidth
+    implicitHeight: column.height
+    implicitWidth: column.width
 
     Rectangle {
         id: background
@@ -41,55 +39,54 @@ Item {
         radius: Theme.radius
     }
 
-    Text {
-        id: confirmationText
+    Column {
+        id: column
 
-        anchors {
-            left: parent.left
-            right: parent.right
-            top: parent.top
-            bottom: buttonRow.top
-            leftMargin: Theme.horizontalMargin
-            rightMargin: Theme.horizontalMargin
-            topMargin: Theme.verticalMargin
-            bottomMargin: Theme.verticalMargin
+        anchors.centerIn: parent
+
+        leftPadding: Theme.horizontalMargin
+        rightPadding: Theme.horizontalMargin
+        bottomPadding: Theme.verticalMargin
+        topPadding: Theme.verticalMargin
+        spacing: Theme.verticalItemSpace
+
+        Text {
+            id: confirmationText
+
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font: Theme.fontH6
+            color: Theme.textForeground
+            text: confirmationPopupItem.text
+            wrapMode: Text.Wrap
+            elide: Text.ElideRight
+            clip: true
         }
 
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        font: Theme.fontH6
-        color: Theme.textForeground
-        text: confirmationPopupItem.text
-        wrapMode: Text.Wrap
-        elide: Text.ElideRight
-        clip: true
-    }
+        Row {
+            id: buttonRow
 
-    Row {
-        id: buttonRow
+            anchors.horizontalCenter: parent.horizontalCenter
 
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            bottom: parent.bottom
-            bottomMargin: Theme.verticalMargin
-        }
+            spacing: Theme.horizontalItemSpace
 
-        spacing: Theme.horizontalItemSpace
+            Knut.Button {
+                id: cancleButton
 
-        Knut.Button {
-            id: cancleButton
+                text: qsTr("Cancle")
 
-            text: qsTr("Cancle")
+                onClicked: confirmationPopupItem.clicked(false)
+            }
 
-            onClicked: confirmationPopupItem.clicked(false)
-        }
+            Knut.Button {
+                id: okButton
 
-        Knut.Button {
-            id: okButton
+                text: qsTr("Ok")
 
-            text: qsTr("Ok")
-
-            onClicked: confirmationPopupItem.clicked(true)
+                onClicked: confirmationPopupItem.clicked(true)
+            }
         }
     }
 }
