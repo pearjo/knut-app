@@ -103,6 +103,7 @@ Item {
             height: childrenRect.height
             width: parent.width
 
+            interactive: false
             model: taskClient.taskModel
 
             delegate: Item{

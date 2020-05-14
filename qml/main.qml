@@ -35,38 +35,60 @@ ApplicationWindow {
     title: qsTr("Knut")
     visible: true
 
-    Knut.TopBar {
-        id: topBar
-
-        anchors {
-            left: parent.left
-            right: parent.right
-            top: parent.top
-        }
-
-        currentIndex: swipeView.currentIndex
-        model: ["../../images/icons/lamp.svg",
-                "../../images/icons/temperature.svg",
-                "../../images/icons/task.svg"]
-    }
-
     SwipeView {
         id: swipeView
 
         anchors {
             left: parent.left
             right: parent.right
-            top: topBar.bottom
-            bottom: parent.bottom
+            top: parent.top
+            bottom: topBar.top
         }
 
         background: Rectangle { color: Theme.background }
         clip: true
         currentIndex: topBar.currentIndex
+        enabled: !backdrop.isOpen
 
         Lights.LightList {}
         Temperature.TemperatureList {}
         Tasks.TaskList {}
+    }
+
+    Knut.ModalBackground {
+        id: blurBackground
+
+        anchors.fill: swipeView
+
+        opacity: backdrop.isOpen ? 1 : 0
+        source: swipeView
+    }
+
+    Knut.Backdrop {
+        id: backdrop
+
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: topBar.top
+        }
+
+        isOpen: topBar.backdropOpen
+    }
+
+    Knut.TopBar {
+        id: topBar
+
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+
+        currentIndex: swipeView.currentIndex
+        model: ["../../images/icons/lamp.svg",
+                "../../images/icons/temperature.svg",
+                "../../images/icons/task.svg"]
     }
 
     Screens.LoadingScreen { id: loadingScreen; anchors.fill: parent }
