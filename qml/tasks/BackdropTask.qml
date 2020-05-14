@@ -46,7 +46,7 @@ Item {
             bottomMargin: Theme.verticalMargin
         }
 
-        color: Theme.backgroundElevated
+        color: Theme.elevated
         radius: Theme.radius
     }
 

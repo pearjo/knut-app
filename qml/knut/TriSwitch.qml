@@ -96,7 +96,7 @@ Slider {
 
             anchors.fill: parent
 
-            color: root.pressed ? Theme.foregroundPressed : Theme.foreground
+            color: root.pressed ? Theme.foregroundPressed : Theme.light
             radius: height / 2
         }
 

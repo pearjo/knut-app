@@ -60,7 +60,7 @@ Slider {
         height: parent.height
         width: parent.height
 
-        color: root.pressed ? Theme.foregroundPressed : Theme.foreground
+        color: root.pressed ? Theme.foregroundPressed : Theme.light
         radius: 13
         x: root.leftPadding + root.visualPosition * (root.availableWidth - width)
         y: root.topPadding + root.availableHeight / 2 - height / 2

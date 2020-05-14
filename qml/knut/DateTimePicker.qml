@@ -51,7 +51,7 @@ Item {
 
         color: Theme.background
         radius: Theme.radius
-        opacity: Theme.opacity
+        opacity: Theme.popupOpacity
     }
 
     Column {
