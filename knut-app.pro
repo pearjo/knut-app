@@ -31,6 +31,7 @@ SOURCES += \
     $$PWD/src/services/*.cpp
 
 RESOURCES += \
+    $$files($$PWD/fonts/caladea/*.ttf) \
     $$files($$PWD/fonts/noto/*.ttf) \
     $$files($$PWD/fonts/roboto/*.ttf) \
     $$files($$PWD/fonts/weather-icons/*.ttf) \

@@ -18,14 +18,10 @@ pragma Singleton
 import QtQuick 2.14
 
 QtObject {
+    readonly property bool isLight: knutHelper.light
+
     // animations
     readonly property real animationDuration: 300
-
-    // controls
-    readonly property color controlActive: accent
-    readonly property color controlBackground: "#121212"
-    readonly property color controlForeground: accent
-    readonly property color controlInactive: "#424242"
 
     // dimensions
     readonly property real horizontalItemSpace: 8
@@ -61,10 +57,10 @@ QtObject {
     }
     property font fontH4
     fontH4 {
-        capitalization: Font.MixedCase
-        family: typefaceHeader.name
+        capitalization: Font.AllUppercase
+        family: typefaceSerif.name
         letterSpacing: 0.25
-        pixelSize: 34
+        pixelSize: 26
         weight: Font.Normal
     }
     property font fontH5
@@ -81,7 +77,7 @@ QtObject {
         family: typefaceHeader.name
         letterSpacing: 0.15
         pixelSize: 20
-        weight: Font.Medium
+        weight: Font.Normal
     }
     property font fontSubtitle1
     fontSubtitle1 {
@@ -146,38 +142,61 @@ QtObject {
     readonly property FontLoader typefaceHeader: FontLoader {
         source: "../../../fonts/roboto/RobotoCondensed-Regular.ttf"
     }
+    readonly property FontLoader typefaceSerif: FontLoader {
+        source: "../../../fonts/caladea/Caladea-Regular.ttf"
+    }
     readonly property FontLoader typefaceWeatherIcon: FontLoader {
         source: "../../../fonts/weather-icons/weathericons-regular-webfont.ttf"
     }
 
+    // colors
+
+    // backdrop and navigation bars
+    readonly property color elevated: isLight ? Qt.lighter(background, 2)
+                                              : Qt.darker(background, 2)
+
+    // controls
+    readonly property color controlActive: isLight ? "#66717E" : accent
+    readonly property color controlForeground: controlActive
+    readonly property color controlInactive: isLight ? Qt.darker(background, 1.2)
+                                                     : Qt.lighter(background, 1.5)
+
     // general
-    /* readonly property color accent: "#D5A56B" */
-    readonly property color accent: "#FFC68A"
-    readonly property color background: "#2F2F2F"
-    readonly property color backgroundElevated: "#212121"
-    readonly property color brightLayer: "#2FFFFFFF"
-    readonly property color darkLayer: "#80000000"
-    readonly property color foreground: "#FAFAFA"
+    readonly property color accent: isLight ? "#000000" : "#FFC68A"
+    readonly property color dark: isLight ? "#424242" : "#000000"
+    readonly property color light: "#FFFFFF"
+
+    readonly property color background: isLight ? "#FEF9EC" : "#2F2F2F"
+    readonly property color backgroundElevated: Qt.darker(background,
+                                                          isLight ? 1.1 : 1.5)
+    readonly property color brightLayer: Qt.rgba(light.r,
+                                                 light.g,
+                                                 light.b,
+                                                 isLight ? 0.5 : 0.1)
+    readonly property color darkLayer: Qt.rgba(dark.r,
+                                               dark.g,
+                                               dark.b,
+                                               isLight ? 0.1 : 0.3)
+    readonly property color foreground: isLight ? dark : light
     readonly property color foregroundPressed: "#FAFAFA"
     readonly property real opacity: 0.5
+    readonly property real popupOpacity: 0.8
 
     // margins
     readonly property real horizontalMargin: 16
     readonly property real verticalMargin: 8
 
     // shadows
-    readonly property color shadowColor: "#80000000"
+    readonly property color shadowColor: darkLayer
     readonly property real shadowHorizontalOffset: 0
-    readonly property real shadowRadius: 10.0
+    readonly property real shadowRadius: 10
     readonly property real shadowSamples: 17
     readonly property real shadowVerticalOffset: 0
 
     // text
-    readonly property color textAccent: accent
+    readonly property color textAccent: isLight ? "#000000" : accent
     readonly property color textBackground: background
-    readonly property color textForeground: foreground
-    readonly property color textDisabled: Qt.rgba(foreground.r,
-                                                  foreground.g,
-                                                  foreground.b,
-                                                  0.5)
+    readonly property color textForeground: isLight ? "#616161" : "#E5E5E5"
+    readonly property color textDisabled: isLight ? Qt.lighter(textForeground, 1.5)
+                                                  : Qt.darker(textForeground, 1.5)
 }

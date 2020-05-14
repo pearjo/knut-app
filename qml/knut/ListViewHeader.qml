@@ -24,7 +24,7 @@ Rectangle {
     /// The \a ListView title text.
     property alias title: titleText.text
 
-    implicitHeight: 48
+    implicitHeight: 56
     implicitWidth: Theme.referenceWidth
 
     color: Theme.background
@@ -43,7 +43,7 @@ Rectangle {
 
         color: Theme.textAccent
         elide: Text.ElideRight
-        font: Theme.fontH5
+        font: Theme.fontH4
         verticalAlignment: Text.AlignVCenter
     }
 }

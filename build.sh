@@ -46,6 +46,16 @@ getfonts()
 
   pushd fonts
 
+  if [ ! -d "caladea" ]
+  then
+    mkdir caladea
+    pushd caladea
+    curl https://fonts.google.com/download?family=Caladea --output tmp.zip
+    unzip tmp.zip
+    rm tmp.zip
+    popd
+  fi
+
   if [ ! -d "noto" ]
   then
     mkdir noto

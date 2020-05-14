@@ -42,7 +42,7 @@ Item {
         anchors.fill: parent
 
         color: Theme.background
-        opacity: Theme.opacity
+        opacity: Theme.popupOpacity
         radius: Theme.radius
     }
 

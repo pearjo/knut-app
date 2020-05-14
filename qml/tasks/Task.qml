@@ -28,11 +28,13 @@ import "../knut" as Knut
 FocusScope {
     id: root
 
+    /* internal property describing whether the control is extended or not */
+    property bool __isOpen: false
+
     //! This property holds the Knut \a Task which is representet by this item.
     property var task: dummytask
 
-    property bool __isOpen: false
-
+    /* internal property */
     readonly property real __itemHeight: 76
 
     implicitHeight: __isOpen ? rootColumn.height : __itemHeight
@@ -201,10 +203,9 @@ FocusScope {
                         topMargin: Theme.verticalMargin
                     }
 
-                    color: Theme.textForeground
+                    color: __isOpen ? Theme.textForeground : Theme.textDisabled
                     elide: Text.ElideRight
                     font: Theme.fontSubtitle1
-                    opacity: Theme.opacity
                     text: task.assignee !== "" ? dueInfo + " • " + task.assignee
                                                : dueInfo
                 }

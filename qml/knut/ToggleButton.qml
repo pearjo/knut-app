@@ -39,8 +39,8 @@ Item {
             margins: 12
         }
 
-        color: root.checkable && root.checked ? Theme.accent
-            : Theme.foreground
+        color: root.checkable && !root.checked ? Theme.controlInactive
+                                               : Theme.controlActive
         icon.fillMode: Image.PreserveAspectFit
     }
 

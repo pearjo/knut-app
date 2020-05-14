@@ -29,6 +29,9 @@ import "../knut" as Knut
 FocusScope {
     id: root
 
+    /* internal property describing whether the control is extended or not */
+    property bool __isOpen: false
+
     //! A Knut \a Light service to be controlled.
     property var light: dummylight
 
@@ -79,8 +82,7 @@ FocusScope {
 
         anchors.fill: parent
 
-        color: root.state === "closed" ? Theme.background
-                                       : Theme.backgroundElevated
+        color: __isOpen ? Theme.backgroundElevated : Theme.background
     }
 
     MouseArea {
@@ -90,7 +92,7 @@ FocusScope {
 
         onClicked: {
             if (light.hasDimlevel || light.hasTemperature)
-                root.state = root.state === "closed" ? "opened" : "closed";
+                __isOpen = !__isOpen;
             root.forceActiveFocus();
         }
     }
@@ -156,10 +158,9 @@ FocusScope {
                         topMargin: Theme.verticalMargin
                     }
 
-                    color: Theme.textForeground
+                    color: __isOpen ? Theme.textForeground : Theme.textDisabled
                     elide: Text.ElideRight
                     font: Theme.fontSubtitle1
-                    opacity: 0.5
                     text: info
                 }
             }
@@ -349,11 +350,12 @@ FocusScope {
 
     }
 
-    onActiveFocusChanged: !activeFocus ? state = "closed" : undefined
+    onActiveFocusChanged: !activeFocus ? __isOpen = false : undefined
 
     states: [
         State {
             name: "closed"
+            when: !__isOpen
 
             PropertyChanges {
                 target: root
@@ -362,6 +364,7 @@ FocusScope {
         },
         State {
             name: "opened"
+            when: __isOpen
 
             PropertyChanges {
                 target: root

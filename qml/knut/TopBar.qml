@@ -13,9 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtGraphicalEffects 1.14
 import QtQuick 2.14
 import QtQuick.Controls 2.14
-
 import Theme 1.0
 
 import "." as Knut
@@ -44,153 +44,79 @@ Item {
     //! The model with the tab bar icon sources.
     property alias model: barRepeater.model
 
-    implicitHeight: backdropOpen ? rootColumn.height : topItem.height
+    implicitHeight: 56
     implicitWidth: Theme.referenceWidth
 
-    Rectangle {
-        id: background
+    Rectangle { id: background; anchors.fill: parent; color: Theme.elevated }
 
-        anchors.fill: parent
+    DropShadow {
+        anchors.fill: background
 
-        color: Theme.background
-
-        Rectangle { anchors.fill: parent; color: Theme.darkLayer }
+        cached: true
+        color: Theme.shadowColor
+        horizontalOffset: Theme.shadowHorizontalOffset
+        radius: Theme.shadowRadius
+        samples: Theme.shadowSamples
+        source: background
+        verticalOffset: Theme.shadowVerticalOffset
     }
 
+    Knut.AnimatedIconButton {
+        id: backdropButton
 
-    Column {
-        id: rootColumn
+        implicitHeight: parent.height
+        implicitWidth: height
 
-        height: childrenRect.height
-        width: parent.width
+        anchors {
+            left: parent.left
+            leftMargin: Theme.horizontalMargin
+            verticalCenter: parent.verticalCenter
+        }
 
-        Item {
-            id: topItem
+        bottomColor: Theme.accent
+        bottomSource: "../../images/icons/close.svg"
+        iconSize: root.buttonSize * 1.2
+        topColor: Theme.controlForeground
+        topSource: "../../images/icons/knut.svg"
 
-            implicitHeight: 56
+        onClicked: root.backdropOpen = !root.backdropOpen
 
-            anchors {
-                left: parent.left
-                leftMargin: Theme.horizontalMargin
-                right: parent.right
-                rightMargin: Theme.horizontalMargin
-            }
+        Component.onCompleted: state = root.backdropOpen ? "bottom" : "top"
+    }
 
-            Knut.AnimatedIconButton {
-                id: backdropButton
+    TabBar {
+        id: bar
 
-                implicitHeight: parent.height
-                implicitWidth: height
+        implicitHeight: parent.height
 
-                anchors {
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                }
+        anchors {
+            left: backdropButton.right
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+            rightMargin: Theme.horizontalMargin
+        }
 
-                bottomColor: Theme.foreground
-                bottomSource: "../../images/icons/knut.svg"
-                iconSize: root.buttonSize
-                topColor: Theme.accent
-                topSource: "../../images/icons/close.svg"
+        background: Rectangle { opacity: 0 }
 
-                Component.onCompleted: state = root.backdropOpen ? "top"
-                    : "bottom"
+        Repeater {
+            id: barRepeater
 
-                onClicked: root.backdropOpen = !root.backdropOpen
-            }
+            delegate: TabButton {
+                id: tabButton
 
-            TabBar {
-                id: bar
+                anchors.verticalCenter: parent.verticalCenter
 
-                implicitHeight: parent.height
+                icon {
+                    height: root.buttonSize
 
-                anchors {
-                    left: backdropButton.right
-                    right: parent.right
-                    verticalCenter: parent.verticalCenter
+                    color: (bar.currentIndex === index) ? Theme.accent
+                        : Theme.foreground
+                    source: modelData
                 }
 
                 background: Rectangle { opacity: 0 }
-
-                Repeater {
-                    id: barRepeater
-
-                    delegate: TabButton {
-                        id: tabButton
-
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        icon {
-                            height: root.buttonSize
-
-                            color: (bar.currentIndex === index) ? Theme.accent
-                                : Theme.foreground
-                            source: modelData
-                        }
-
-                        background: Rectangle { opacity: 0 }
-                        opacity: bar.currentIndex === index ? 1.0 : Theme.opacity
-                    }
-                }
+                opacity: bar.currentIndex === index ? 1.0 : Theme.opacity
             }
-        }
-
-        Item {
-            id: backdrop
-
-            implicitHeight: backdropColumn.height
-
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-
-            clip: true
-
-            Column {
-                id: backdropColumn
-
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    top: parent.top
-                }
-
-                bottomPadding: Theme.verticalMargin
-                topPadding: Theme.verticalMargin
-
-                Tasks.BackdropTask { width: parent.width }
-                Temperature.BackdropLocalWeather { width: parent.width }
-                Lights.BackdropLightControl { width: parent.width }
-            }
-        }
-    }
-
-    states: [
-        State {
-            name: "closed"
-            when: !backdropOpen
-
-            PropertyChanges {
-                target: root
-                height: topItem.height
-            }
-        },
-        State {
-            name: "open"
-            when: backdropOpen
-
-            PropertyChanges {
-                target: root
-                height: implicitHeight
-            }
-        }
-    ]
-
-    Behavior on height {
-        NumberAnimation {
-            duration: Theme.animationDuration
-            easing.type: Easing.OutCubic
         }
     }
 }

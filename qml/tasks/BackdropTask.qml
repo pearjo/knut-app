@@ -46,7 +46,7 @@ Item {
             bottomMargin: Theme.verticalMargin
         }
 
-        color: Theme.backgroundElevated
+        color: Theme.elevated
         radius: Theme.radius
     }
 
@@ -103,6 +103,7 @@ Item {
             height: childrenRect.height
             width: parent.width
 
+            interactive: false
             model: taskClient.taskModel
 
             delegate: Item{

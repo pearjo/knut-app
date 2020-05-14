@@ -13,33 +13,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtGraphicalEffects 1.14
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import Theme 1.0
 
-//! A item that displays a blurred and dimmed modal background.
+import "../lights" as Lights
+import "../tasks" as Tasks
+import "../temperature" as Temperature
+
 Item {
-    id: root
+    id: backdrop
 
-    property alias source: fastBlur.source
+    property bool isOpen: false
 
-    FastBlur {
-        id: fastBlur
+    implicitHeight: isOpen ? backdropColumn.height : 0
+    implicitWidth: Theme.referenceWidth
 
-        anchors.fill: parent
+    clip: true
 
-        radius: 48
-        source: !!ApplicationWindow.window ? ApplicationWindow.window.contentItem
-                                           : null
+    Column {
+        id: backdropColumn
+
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+        }
+
+        bottomPadding: Theme.verticalMargin
+        topPadding: Theme.verticalMargin
+
+        Tasks.BackdropTask { width: parent.width }
+        Temperature.BackdropLocalWeather { width: parent.width }
+        Lights.BackdropLightControl { width: parent.width }
     }
 
-    Rectangle { anchors.fill: parent; color: Theme.darkLayer }
-
-    Behavior on opacity {
+    Behavior on implicitHeight {
         NumberAnimation {
-            easing.type: Easing.OutCubic
             duration: Theme.animationDuration
+            easing.type: Easing.OutCubic
         }
     }
 }
