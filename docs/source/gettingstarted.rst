@@ -10,12 +10,15 @@ Build
 
 The Knut app is powered by the Qt framework and requires Qt 5.14. Before
 building the app, some fonts required by the :ref:`appui` should be downloaded
-first.  Those are the `Noto Sans <https://www.google.com/get/noto/>`_, `Roboto
-Condensed <https://fonts.google.com/specimen/Roboto+Condensed>`_ and the
-`Weather Icons <https://github.com/erikflowers/weather-icons>`_ font. The UI
-expects them to be found in the following directories::
+first.  Those are the `Caladea <https://fonts.google.com/specimen/Caladea>`_, `Noto
+Sans <https://www.google.com/get/noto/>`_, `Roboto Condensed
+<https://fonts.google.com/specimen/Roboto+Condensed>`_ and the `Weather Icons
+<https://github.com/erikflowers/weather-icons>`_ font. The UI expects them to be
+found in the following directories::
 
    fonts/
+   ├── caladea
+   │   └── Caladea-Regular.ttf
    ├── noto
    │   └── NotoSans-Regular.ttf
    ├── roboto
