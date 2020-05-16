@@ -21,5 +21,6 @@ more information about the message format of each service.
    reference/knutclient
    reference/knuthelper
    reference/lightservice
+   reference/localservice
    reference/taskservice
    reference/temperatureservice

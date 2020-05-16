@@ -37,7 +37,7 @@ KnutHelper::~KnutHelper()
  *  Note that this method is a wrapper for the QDateTime::toString() method. For more details on
  *  \a format please see QDateTime::toString().
  *
- *  Note that this method is invokable from QML.
+ *  \b Note: This function can be invoked via the meta-object system and from QML.
  *
  *  \sa QDateTime::toString()
  */
@@ -51,7 +51,7 @@ QString KnutHelper::formatDateTime(const QDateTime &dateTime, const QString &for
  *  Converts the seconds \a s into a QTime and formats it using QTime::toString(). For \a format
  *  options please see QTime::toString().
  *
- *  Note that this method is invokable from QML.
+ *  \b Note: This function can be invoked via the meta-object system and from QML.
  *
  *  \sa QTime::toString()
  */

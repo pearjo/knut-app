@@ -18,9 +18,6 @@ import QtQuick 2.14
 Item {
     id: root
 
-    //! This property defines is a light theme should be used.
-    property bool light: true
-
     //! This property describes the current date time.
     property var time: new Date()
 

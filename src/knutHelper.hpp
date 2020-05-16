@@ -32,29 +32,23 @@ public:
     explicit KnutHelper(QObject *parent = nullptr);
     ~KnutHelper();
 
-    //! This property describes whether a light or dark app theme should be used.
-    Q_PROPERTY(bool light READ light NOTIFY lightChanged)
-
     /*! \brief This property holds the current system time.
      *
-     *  Note that the time is updated only every seconds and is therefore not very precise.
+     *  \b Note: The time is updated only every seconds and is therefore not very precise.
      */
     Q_PROPERTY(QDateTime time READ time NOTIFY timeChanged)
 
-    bool light() const {return mLight;}
     QDateTime time() const {return mTime;}
     static Q_INVOKABLE QString formatDateTime(const QDateTime &dateTime, const QString &format);
     static Q_INVOKABLE QString toStringFromSecs(const int &s, const QString &format);
 
 signals:
-    void lightChanged();
     void timeChanged();
 
 private slots:
     void mOnTimer();
 
 private:
-    bool mLight = false;
     QDateTime mTime;
     QTimer *mTimer;
 };

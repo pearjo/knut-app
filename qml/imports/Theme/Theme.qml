@@ -18,7 +18,7 @@ pragma Singleton
 import QtQuick 2.14
 
 QtObject {
-    readonly property bool isLight: knutHelper.light
+    readonly property bool isLight: local.isDaylight
 
     // animations
     readonly property real animationDuration: 300

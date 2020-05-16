@@ -17,11 +17,11 @@
 #include <QAbstractSocket>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QFont>
 
-#include "knutclient.hpp"
 #include "knutHelper.hpp"
+#include "knutclient.hpp"
 #include "services/lightClient.hpp"
+#include "services/local.hpp"
 #include "services/task.hpp"
 #include "services/taskClient.hpp"
 #include "services/temperatureClient.hpp"
@@ -50,6 +50,8 @@ int main(int argc, char *argv[])
     LightClient lightClient;
     lightClient.connectToClient(&knutClient);
 
+    Local local(&knutClient);
+
     TaskClient taskClient;
     taskClient.connectToClient(&knutClient);
 
@@ -62,6 +64,8 @@ int main(int argc, char *argv[])
                                              &knutHelper);
     engine.rootContext()->setContextProperty(QStringLiteral("lightClient"),
                                              &lightClient);
+    engine.rootContext()->setContextProperty(QStringLiteral("local"),
+                                             &local);
     engine.rootContext()->setContextProperty(QStringLiteral("taskClient"),
                                              &taskClient);
     engine.rootContext()->setContextProperty(QStringLiteral("temperatureClient"),
