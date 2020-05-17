@@ -180,21 +180,27 @@ Item {
                     text: qsTr("Overdue")
                     verticalAlignment: Text.AlignVCenter
 
+                    states: [
+                        State {
+                            name: "hidden"
+                            when: knutHelper.time <= model.task.due
+                        },
+                        State {
+                            name: "overdue"
+                            when: knutHelper.time > model.task.due
 
-                    states: State {
-                        name: "overdue"
-                        when: knutHelper.time > model.task.due
-
-                        AnchorChanges {
-                            target: overdueText
-                            anchors {
-                                left: undefined
-                                right: parent.right
+                            AnchorChanges {
+                                target: overdueText
+                                anchors {
+                                    left: undefined
+                                    right: parent.right
+                                }
                             }
                         }
-                    }
+                    ]
 
                     transitions: Transition {
+                        from: "hidden"
                         to: "overdue"
 
                         AnchorAnimation {

@@ -52,7 +52,7 @@ Item {
         Component.onCompleted: {
             [
                 {
-                    due: new Date(Date.now() + 60000), // due in one minute
+                    due: new Date(Date.now() - 60000),
                     dueType: KnutTask.Today,
                     task: {
                         done: false,
@@ -60,9 +60,9 @@ Item {
                         author: "Bob",
                         body: "- [x] get some cheese at the supermarket.",
                         title: "Buy cheese",
-                        due: new Date(Date.now() + 60000), // due in one minute
+                        due: new Date(Date.now() - 60000),
                         dueType: KnutTask.Today,
-                        reminder: new Date(Date.now() + 5000), // remind five seconds
+                        reminder: new Date(Date.now() - 65000),
                         uid: "12341"
                     }
                 },
