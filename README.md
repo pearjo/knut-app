@@ -49,3 +49,23 @@ READTHEDOCS='True' make html
 
 from within the *docs* directory. This builds the documentation with
 the index file *build/html/index.html*.
+
+## License
+
+The Knut app is licensed under the GNU GPL v3. The following resources
+distributed with the app are licensed under the following licenses. Note that
+the corresponding license files are located next to the resource files.
+
+### Fonts
+
+- `fonts/caladea/Caladea-Regular.ttf` is licensed under the SIL OFL 1.1
+- `fonts/noto/NotoSans-*.ttf` are licensed under the Apache License 2.0
+- `fonts/roboto/RobotoCondensed-*.ttf` are licensed under the Apache License 2.0
+- `fonts/weather-icons/weathericons-regular-webfont.ttf` is licensed under the
+  SIL OFL 1.1
+
+### Icons
+
+- `images/icons/other/markdown-mark/markdown-mark-solid.svg` is licensed under
+  the CC0 license
+- `images/icons/other/material/*.svg` are licensed under the Apache License 2.0

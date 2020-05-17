@@ -136,18 +136,10 @@ QtObject {
         weight: Font.Normal
     }
 
-    readonly property FontLoader typefaceBody: FontLoader {
-        source: "../../../fonts/noto/NotoSans-Regular.ttf"
-    }
-    readonly property FontLoader typefaceHeader: FontLoader {
-        source: "../../../fonts/roboto/RobotoCondensed-Regular.ttf"
-    }
-    readonly property FontLoader typefaceSerif: FontLoader {
-        source: "../../../fonts/caladea/Caladea-Regular.ttf"
-    }
-    readonly property FontLoader typefaceWeatherIcon: FontLoader {
-        source: "../../../fonts/weather-icons/weathericons-regular-webfont.ttf"
-    }
+    readonly property FontLoader typefaceBody: Fonts.noto
+    readonly property FontLoader typefaceHeader: Fonts.roboto
+    readonly property FontLoader typefaceSerif: Fonts.caladea
+    readonly property FontLoader typefaceWeatherIcon: Fonts.weatherIcons
 
     // colors
 

@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>main.qml</file>
-        <file>imports/Theme/qmldir</file>
-        <file>imports/Theme/Theme.qml</file>
-    </qresource>
-</RCC>

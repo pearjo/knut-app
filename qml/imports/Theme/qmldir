@@ -1,2 +1,3 @@
 module Theme
+singleton Fonts 1.0 Fonts.qml
 singleton Theme 1.0 Theme.qml

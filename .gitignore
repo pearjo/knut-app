@@ -3,9 +3,6 @@ build/
 docs/build
 docs/doxygen/xml
 
-# ignore font files
-fonts/
-
 # ignore user files
 *.env
 *.pro.*

@@ -20,7 +20,6 @@ help()
    echo "Usage: build.sh [OPTION] TARGET"
    echo "Builds the Knut app for a specified TARGET."
    echo "options:"
-   echo "  -f  Get all fonts needed for the UI"
    echo "  -h  Print this help message"
    echo
    echo "targets:"
@@ -33,68 +32,9 @@ help()
    echo "JAVA_HOME need to be set additionaly"
 }
 
-
-getfonts()
-{
-  echo "Download needed fonts."
-
-  # get required fonts
-  if [ ! -d "fonts" ]
-  then
-    mkdir fonts
-  fi
-
-  pushd fonts
-
-  if [ ! -d "caladea" ]
-  then
-    mkdir caladea
-    pushd caladea
-    curl https://fonts.google.com/download?family=Caladea --output tmp.zip
-    unzip tmp.zip
-    rm tmp.zip
-    popd
-  fi
-
-  if [ ! -d "noto" ]
-  then
-    mkdir noto
-    pushd noto
-    curl https://fonts.google.com/download?family=Noto%20Sans --output tmp.zip
-    unzip tmp.zip
-    rm tmp.zip
-    popd
-  fi
-
-  if [ ! -d "roboto" ]
-  then
-    mkdir roboto
-    pushd roboto
-    curl https://fonts.google.com/download?family=Roboto%20Condensed \
-         --output tmp.zip
-    unzip tmp.zip
-    rm tmp.zip
-    popd
-  fi
-
-  if [ ! -d "weather-icons" ]
-  then
-    mkdir weather-icons
-    pushd weather-icons
-    wget https://raw.githubusercontent.com/erikflowers/weather-icons/master/font/weathericons-regular-webfont.ttf
-    popd
-  fi
-
-  popd
-}
-
 # options
-while getopts ":fh" option; do
+while getopts ":h" option; do
   case $option in
-    f)
-      getfonts
-      exit 1
-      ;;
     h)
       help
       exit 1
@@ -121,9 +61,6 @@ case "${1}" in
     help
     exit 1
 esac
-
-# download fonts if needed
-getfonts
 
 # run qmake for the specified target
 BUILD=build/$TARGET
