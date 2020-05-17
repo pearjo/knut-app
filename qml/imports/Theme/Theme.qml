@@ -25,9 +25,9 @@ QtObject {
 
     // dimensions
     readonly property real horizontalItemSpace: 8
-    readonly property real radius: 4
-    readonly property real referenceHeight: 812
-    readonly property real referenceWidth: 375
+    readonly property real radius: 6
+    readonly property real referenceHeight: 896
+    readonly property real referenceWidth: 414
     readonly property real verticalItemSpace: 8
 
     // fonts
