@@ -9,9 +9,10 @@ Knut is a friendly penguin to help organize your home. This project provides an
 app to provide an user interface to the `Knut server
 <https://github.com/pearjo/knut-server>`_.
 
-.. image:: _static/app.png
+.. image:: ../../images/showcase.png
    :align: center
    :alt: screenshot of the app
+   :scale: 50 %
 
 .. toctree::
    :maxdepth: 2
