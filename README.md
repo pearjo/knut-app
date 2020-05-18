@@ -8,7 +8,7 @@
 
 The Knut app is a client for the [Knut Server](https://github.com/pearjo/knut-server).
 
-![Image of the Knut app](https://github.com/pearjo/knut-app/blob/master/images/showcase.png)
+![Image of the Knut app](https://github.com/pearjo/knut-app/blob/devel/images/showcase.png)
 
 ## Install
 
