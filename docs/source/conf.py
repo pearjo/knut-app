@@ -16,13 +16,12 @@ import sys
 
 # -- Project information -----------------------------------------------------
 
-project = 'Knut App Documentation'
+project = 'Knut App'
 copyright = '2019-2020, Joe Pearson'
 author = 'Joe Pearson'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1.0'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -61,30 +60,21 @@ if read_the_docs_build:
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+# html_theme = 'sphinx_rtd_theme'
+html_theme = 'alabaster'
+
 html_theme_options = {
-    'canonical_url': '',
-    'analytics_id': '',  #  Provided by Google in your dashboard
-    'logo_only': True,
-    'display_version': False,
-    'prev_next_buttons_location': 'bottom',
-    'style_external_links': False,
-    'style_nav_header_background': '#efefef',
-    # Toc options
-    'collapse_navigation': True,
-    'sticky_navigation': True,
-    'navigation_depth': 4,
-    'includehidden': True,
-    'titles_only': False
+    'badge_branch': 'devel',
+    'github_button': True,
+    'github_repo': 'knut-app',
+    'github_user': 'pearjo',
+    'logo': 'knut.png',
+    'logo_name': True,
+    'page_width': 'max-content',
+    'show_powered_by': False
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-
-html_logo = '_static/knut.png'
-
-# These paths are either relative to html_static_path
-# or fully qualified paths (eg. https://...)
-html_css_files = ['css/custom.css']

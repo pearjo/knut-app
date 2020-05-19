@@ -1,4 +1,3 @@
 # Requirements to build the documentation
 breathe==4.15.0
 doxyqml
-sphinx_rtd_theme

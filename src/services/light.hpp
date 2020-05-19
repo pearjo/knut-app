@@ -31,29 +31,33 @@ class Light : public QObject
 {
     Q_OBJECT
 
-    /// The current light color.
+    //! The current light color.
     Q_PROPERTY(QColor lightColor READ color WRITE setColor NOTIFY colorChanged)
-    /// The hex color code that represents the light when the temperature is 0.
+    //! The hex color code that represents the light when the temperature is 0.
     Q_PROPERTY(QString colorCold MEMBER colorCold CONSTANT)
-    /// The hex color code that represents the light when the temperature is 100.
+    //! The hex color code that represents the light when the temperature is 100.
     Q_PROPERTY(QString colorWarm MEMBER colorWarm CONSTANT)
-    /// The location of the light inside the room.
+    //! The location of the light inside the room.
     Q_PROPERTY(QString location MEMBER location CONSTANT)
-    /// The room where the light is located.
+    //! The room where the light is located.
     Q_PROPERTY(QString room MEMBER room CONSTANT)
-    /// Whether the light has a light color or not.
+    //! Whether the light has a light color or not.
     Q_PROPERTY(bool hasColor MEMBER hasColor CONSTANT)
-    /// Whether the light can be dimmed or not.
+    //! Whether the light can be dimmed or not.
     Q_PROPERTY(bool hasDimlevel MEMBER hasDimlevel CONSTANT)
-    /// Whether the light has a light temperature or not.
+    //! Whether the light has a light temperature or not.
     Q_PROPERTY(bool hasTemperature MEMBER hasTemperature CONSTANT)
-    /// The current state of the light.
+    //! The current state of the light.
     Q_PROPERTY(bool lightState READ lightState WRITE setLightState NOTIFY lightStateChanged)
-    /// The light temperature as a value in the range from \c 0 to \c 100 where \c 0 is cold and
-    /// \c 100 warm.
+    /*! \brief This property holds the light temperature.
+     *
+     *  The value is in the range from \c 0 to \c 100 where \c 0 is cold and \c 100 warm.
+     */
     Q_PROPERTY(qint16 temperature READ temperature WRITE setTemperature NOTIFY temperatureChanged)
-    /// The dim-level of the light in the range from \c 0 to \c 100 where \c 0 is off and \c 100
-    /// full on.
+    /*! \brief This property holds the dim-level of the light
+     *
+     *  The value is in the range from \c 0 to \c 100 where \c 0 is off and \c 100 full on.
+     */
     Q_PROPERTY(qint8 dimlevel READ dimlevel WRITE setDimlevel NOTIFY dimlevelChanged)
 
 public:

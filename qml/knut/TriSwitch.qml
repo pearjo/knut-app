@@ -19,23 +19,22 @@ import QtQuick.Controls 2.14
 
 import Theme 1.0
 
-/*! \brief A switch with three states.
+/*! \brief Displays a switch with three states.
  *
- *  This switch can have the three values \c 0, \c 0.5 and \c 1.
- *  A user can only set the switch to \c 0 or \c 1, while a back-end
- *  can set the \a value \c 0.5.
- *
- *  This can be used for example a master ligth switch. The user can switch all
- *  light on or off, but if only one light changes, neither are all lights then
- *  on or off. This state can then be represented by the \a value \c 0.5.
+ *  This switch can have the three values \c 0, \c 0.5 and \c 1.  By clicking
+ *  the switch, the values \c 0 and \c 1 can only be set. However, from QML the
+ *  value can be also set to \c 0.5.
  */
 Slider {
     id: root
 
-    //! Boolean representation of the TriSwitch. If \a value is greater zero,
-    //! this property is \c true.
+    /*! \brief This property represents the boolean value of the switch.
+     *
+     *  If \a value is greater zero, the \a boolValue will be \c true.
+     */
     readonly property bool boolValue: value > 0 ? true : false
 
+    //! Emitted when the switch is clicked.
     signal clicked()
 
     implicitHeight: 24
