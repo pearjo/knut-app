@@ -148,17 +148,18 @@ QtObject {
                                               : Qt.darker(background, 2)
 
     // controls
-    readonly property color controlActive: isLight ? "#66717E" : accent
+    readonly property color controlActive: isLight ? "#616161" : accent
     readonly property color controlForeground: controlActive
     readonly property color controlInactive: isLight ? Qt.darker(background, 1.2)
                                                      : Qt.lighter(background, 1.5)
+    readonly property color switchActive: isLight ? "#65CE9F" : accent
 
     // general
     readonly property color accent: isLight ? "#000000" : "#FFC68A"
     readonly property color dark: isLight ? "#424242" : "#000000"
     readonly property color light: "#FFFFFF"
 
-    readonly property color background: isLight ? "#FEF9EC" : "#2F2F2F"
+    readonly property color background: isLight ? "#EFEFEF" : "#2F2F2F"
     readonly property color backgroundElevated: Qt.darker(background,
                                                           isLight ? 1.1 : 1.5)
     readonly property color brightLayer: Qt.rgba(light.r,
