@@ -64,7 +64,7 @@ ApplicationWindow {
         source: swipeView
     }
 
-    Knut.Backdrop {
+    Screens.Backdrop {
         id: backdrop
 
         anchors {
