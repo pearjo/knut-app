@@ -145,23 +145,23 @@ QtObject {
 
     // backdrop and navigation bars
     readonly property color elevated: isLight ? Qt.lighter(background, 2)
-                                              : Qt.darker(background, 2)
+                                              : "#282828"
 
     // controls
-    readonly property color controlActive: isLight ? "#616161" : accent
+    readonly property color controlActive: isLight ? "#9E9E9E" : "#FAFAFA"
     readonly property color controlForeground: controlActive
     readonly property color controlInactive: isLight ? Qt.darker(background, 1.2)
                                                      : Qt.lighter(background, 1.5)
-    readonly property color switchActive: isLight ? "#65CE9F" : accent
+    readonly property color switchActive: isLight ? "#65CE9F" : "#2DE58F"
 
     // general
-    readonly property color accent: isLight ? "#000000" : "#FFC68A"
+    readonly property color accent: isLight ? "#000000" : "#FFFFFF"
     readonly property color dark: isLight ? "#424242" : "#000000"
     readonly property color light: "#FFFFFF"
 
-    readonly property color background: isLight ? "#EFEFEF" : "#2F2F2F"
+    readonly property color background: isLight ? "#EFEFEF" : "#181818"
     readonly property color backgroundElevated: Qt.darker(background,
-                                                          isLight ? 1.1 : 1.5)
+                                                          isLight ? 1.1 : 2)
     readonly property color brightLayer: Qt.rgba(light.r,
                                                  light.g,
                                                  light.b,
@@ -187,9 +187,9 @@ QtObject {
     readonly property real shadowVerticalOffset: 0
 
     // text
-    readonly property color textAccent: isLight ? "#000000" : accent
+    readonly property color textAccent: isLight ? "#000000" : "#BDBDBD"
     readonly property color textBackground: background
-    readonly property color textForeground: isLight ? "#616161" : "#E5E5E5"
+    readonly property color textForeground: isLight ? "#616161" : "#FFFFFF"
     readonly property color textDisabled: isLight ? Qt.lighter(textForeground, 1.5)
                                                   : Qt.darker(textForeground, 1.5)
 }

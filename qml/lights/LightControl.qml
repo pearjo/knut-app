@@ -37,6 +37,7 @@ FocusScope {
 
     //! Height of the Light control when it is not extended.
     readonly property real itemHeight: 76
+
     //! Info text displayed in the control.
     readonly property string info: {
         if (!!dimlevelSlider.visualPosition) {
@@ -279,10 +280,6 @@ FocusScope {
                 color: getTemperature(light.colorCold,
                                       light.colorWarm,
                                       temperatureSlider.visualPosition)
-                border {
-                    width: 2
-                    color: Theme.light
-                }
                 radius: height / 2
                 visible: parent.width > 400
             }

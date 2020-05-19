@@ -69,7 +69,7 @@ Slider {
             height: parent.height
             width: Math.max(p.triState * parent.width, parent.height)
 
-            color: Theme.controlActive
+            color: Theme.switchActive
             radius: parent.radius
         }
     }
@@ -86,7 +86,7 @@ Slider {
 
             anchors.left: parent.left
 
-            color: Theme.controlActive
+            color: Theme.switchActive
             visible: root.width * p.triState > width
         }
 
