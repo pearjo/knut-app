@@ -27,7 +27,7 @@ KnutClient::KnutClient(QObject *parent) :
     mSocket(this)
 {
     // load settings
-    mHostAddress = mSettings.value(HOST_ADDRESS_SETTING, "").toString();
+    mHostAddress = mSettings.value(HOST_ADDRESS_SETTING, "localhost").toString();
     mPort = mSettings.value(PORT_SETTING, 8080).toInt();
 
     // set heartbeat timer
@@ -57,14 +57,14 @@ void KnutClient::mConnectSocket()
         || mHostAddress.length() == 0)
         return;
 
-    qDebug() << "Socket is not connected. Connecting socket...";
+    qDebug("Socket is not connected: Connecting socket...");
     mConnectingToKnut = true;
 
     mSocket.abort();
     mSocket.connectToHost(QHostAddress(mHostAddress), mPort);
 
     if (mSocket.waitForConnected(CONNECT_TIMEOUT)) {
-        qDebug() << "Connected to host" << mHostAddress << "on port" << mPort;
+        qDebug() << "Connected to host:" << mSocket.peerAddress();
 
         if (!connected) {
             connected = true;
@@ -97,44 +97,31 @@ void KnutClient::mConnectSocket()
 void KnutClient::onReadyRead()
 {
     QByteArray buffer;
-    QDataStream in(&mSocket);
-    quint16 messageId = 0;
-    quint32 messageSize = 0;
-    quint8 serviceId = 0;
     QJsonObject message;
+    quint16 messageId = 0;
+    quint8 serviceId = 0;
 
     while (mSocket.bytesAvailable() && !mSocket.atEnd()) {
-        // read message header
-        in >> messageSize;
+        buffer += mSocket.read(1);
 
-        if (messageSize > 0) {
-            qDebug() << "Read" << messageSize << "bytes from socket...";
-
-            buffer = mSocket.read(messageSize);
-
-            // read rest of the message if it's split in multiple packets
-            while (buffer.size() < int(messageSize)) {
-                mSocket.waitForReadyRead();
-                buffer.append(mSocket.read(messageSize - buffer.size()));
-            }
+        if (buffer.endsWith('\0') && buffer.length() > 1) {
+            // remove null bytes and trim for conversion to JSON
+            buffer = buffer.replace('\0', ' ');
+            buffer = buffer.trimmed();
 
             QJsonDocument dataDoc = QJsonDocument::fromJson(buffer);
             QJsonObject data = dataDoc.object();
             QJsonObject message = data["msg"].toObject();
-            serviceId = data["serviceId"].toInt();
-            messageId = data["msgId"].toInt();
+            serviceId = data["serviceid"].toInt();
+            messageId = data["msgid"].toInt();
 
-            // don't log the server's heartbeat
-            if (serviceId > 0 && messageId > 0) {
-                qDebug() << "Received for service"
-                         << serviceId
-                         << "the message"
-                         << messageId
-                         << message;
-                emit receivedMessage(message, serviceId, messageId);
-            }
-        } else if (messageSize == 0) {
-            // received a heartbeat
+            buffer.clear();
+
+            qDebug().noquote() << QString("Received message %1 for service %2:").arg(messageId).arg(serviceId)
+                               << message;
+
+            emit receivedMessage(message, serviceId, messageId);
+        } else if (buffer.endsWith('\0')) {
             mHeartbeatTimer->start();
         }
     }
@@ -149,7 +136,7 @@ void KnutClient::setHostAddress(const QString &hostAddress)
     mHostAddress = hostAddress;
     mConnectSocket();
 
-    qDebug() << "Set host address to " << mHostAddress;
+    qDebug() << "Set host address:" << mHostAddress;
     mSettings.setValue(HOST_ADDRESS_SETTING, mHostAddress);
 
     emit hostAddressChanged();
@@ -179,28 +166,18 @@ void KnutClient::writeRequest(const QJsonObject &message, const quint8 &serviceI
 {
     QJsonDocument dataDoc;
     QJsonObject data;
-    quint32 messageSize;
 
-    data["serviceId"] = serviceId;
-    data["msgId"] = messageId;
+    data["serviceid"] = serviceId;
+    data["msgid"] = messageId;
     data["msg"] = message;
-
     dataDoc.setObject(data);
-    messageSize = dataDoc.toJson().size();
-
-    QDataStream out(&mSocket);
-    out << messageSize;
 
     if (mSocket.isWritable()) {
-        mSocket.write(dataDoc.toJson());
+        mSocket.write(dataDoc.toJson(QJsonDocument::Compact).append('\0'));
 
         if (mSocket.waitForBytesWritten()) {
-            qDebug() << "Message"
-                     << message
-                     << "for service"
-                     << serviceId
-                     << "with the message ID"
-                     << QString("0x%1").arg(messageId, 4, 16, QLatin1Char('0'));
+            qDebug().noquote() << QString("Send message %1 for service %2:").arg(messageId).arg(serviceId)
+                               << message;
         }
     }
 }
@@ -212,33 +189,13 @@ void KnutClient::writeRequest(const QJsonObject &message, const quint8 &serviceI
  */
 void KnutClient::writeRequest(const quint8 &serviceId, const quint16 &messageId)
 {
-    QJsonDocument dataDoc;
     QJsonObject data;
-    quint32 messageSize;
-
-    data["serviceId"] = serviceId;
-    data["msgId"] = messageId;
-    data["msg"] = "";
-
-    dataDoc.setObject(data);
-    messageSize = dataDoc.toJson().size();
-
-    QDataStream out(&mSocket);
-    out << messageSize;
-
-    if (mSocket.isWritable()) {
-        mSocket.write(dataDoc.toJson());
-
-        qDebug() << "Send request for service"
-                 << serviceId
-                 << "with the message ID"
-                 << QString("0x%1").arg(messageId, 4, 16, QLatin1Char('0'));
-    }
+    writeRequest(data, serviceId, messageId);
 }
 
 void KnutClient::mErrorHandler(const QAbstractSocket::SocketError &socketError)
 {
-    qDebug() << "Socket error: " << socketError;
+    qDebug() << "Socket error:" << socketError;
 }
 
 /*! \brief This slot is called if no heartbeat is received.
