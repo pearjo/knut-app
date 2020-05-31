@@ -22,6 +22,10 @@
 
 #include "knutclient.hpp"
 
+const QString KnutClient::HOST_ADDRESS_SETTING = QStringLiteral("knutClient/hostAddress");
+const QString KnutClient::PORT_SETTING = QStringLiteral("knutClient/port");
+const int KnutClient::RECONNECT_TIMEOUT = 1000;
+
 KnutClient::KnutClient(QObject *parent) :
     QObject(parent),
     mSocket(this)
@@ -30,16 +34,16 @@ KnutClient::KnutClient(QObject *parent) :
     mHostAddress = mSettings.value(HOST_ADDRESS_SETTING, "localhost").toString();
     mPort = mSettings.value(PORT_SETTING, 8080).toInt();
 
-    // set heartbeat timer
-    mHeartbeatTimer = new QTimer(this);
-    // wait by a factor of 2 longer for the heartbeat
-    mHeartbeatTimer->setInterval(1 / HEARTBEAT_FREQUENCY * 2000);
-    connect(mHeartbeatTimer, SIGNAL(timeout()), this, SLOT(mHeartbeatMissed()));
+    // set reconnect timer
+    mReconnectTimer = new QTimer(this);
+    mReconnectTimer->setInterval(RECONNECT_TIMEOUT);
+    connect(mReconnectTimer, SIGNAL(timeout()), this, SLOT(mConnectSocket()));
 
     mSocket.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
     connect(&mSocket, SIGNAL(error(QAbstractSocket::SocketError)),
             this, SLOT(mErrorHandler(QAbstractSocket::SocketError)));
+    connect(&mSocket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
     connect(&mSocket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 
     mConnectSocket();
@@ -47,7 +51,7 @@ KnutClient::KnutClient(QObject *parent) :
 
 KnutClient::~KnutClient()
 {
-    delete mHeartbeatTimer;
+    delete mReconnectTimer;
 }
 
 //! Connects the KnutClient to the socket.
@@ -58,12 +62,11 @@ void KnutClient::mConnectSocket()
         return;
 
     qDebug("Socket is not connected: Connecting socket...");
-    mConnectingToKnut = true;
 
     mSocket.abort();
     mSocket.connectToHost(QHostAddress(mHostAddress), mPort);
 
-    if (mSocket.waitForConnected(CONNECT_TIMEOUT)) {
+    if (mSocket.waitForConnected(RECONNECT_TIMEOUT)) {
         qDebug() << "Connected to host:" << mSocket.peerAddress();
 
         if (!connected) {
@@ -73,24 +76,34 @@ void KnutClient::mConnectSocket()
 
         emit knutConnected();
     } else {
-        mHeartbeatTimer->start();
+        mReconnectTimer->start();
     }
-
-    mConnectingToKnut = false;
 }
 
-/*! \brief Read a message from the socket.
+/*! \brief Executed when the socket is disconnected.
  *
- *  Read a Knut message from the socket as specified <a
+ *  Sets the \a connected property to false and starts a reconnection timer
+ */
+void KnutClient::onDisconnected()
+{
+    if (connected) {
+        connected = false;
+        emit connectedChanged();
+
+        mReconnectTimer->start();
+    }
+}
+
+/*! \brief Reads a message from the socket.
+ *
+ *  Reads a null terminated Knut message from the socket as specified <a
  *  href="https://knut-server.readthedocs.io/en/latest/reference/knutserver.html"> here</a>. The
- *  first four bytes are the \c messageSize as a unsigned integer, and the following \c messageSize
- *  bytes is the message as a UTF-8 encoded JSON string. The JSON message must have the keys \c
- *  serviceId, \c msgId and \c msg. Those are read from the message and the signal receivedMessage()
- *  is emitted with \c msg as \a messsage, \c serviceId as \a serviceId and \c msgId as \a
+ *  JSON message must have the keys \c "serviceid", \c "msgid" and \c "msg". Those are read from the
+ *  message and the signal receivedMessage() is emitted with the \a messsage, \a serviceId and \a
  *  messageId.
  *
  *  As long as the socket has data available, data are read from the socket and for each message,
- *  the signal \a receivedMessage() is emitted.
+ *  the signal receivedMessage() is emitted.
  *
  *  \sa receivedMessage()
  */
@@ -121,8 +134,6 @@ void KnutClient::onReadyRead()
                                << message;
 
             emit receivedMessage(message, serviceId, messageId);
-        } else if (buffer.endsWith('\0')) {
-            mHeartbeatTimer->start();
         }
     }
 }
@@ -156,10 +167,10 @@ void KnutClient::setPort(const int &port)
     emit portChanged();
 }
 
-/*! \brief Write a request on the socket with a \a message.
+/*! \brief Writes a request to the socket with a \a message.
  *
- *  Write a request on the socket with a JSON formatted \a message, the \a serviceId and \a
- *  messageId.
+ *  Write a request for the service \a serviceId and the JSON formatted \a message with it's
+ *  \a messageId identifier to the socket.
  */
 void KnutClient::writeRequest(const QJsonObject &message, const quint8 &serviceId,
                               const quint16 &messageId)
@@ -182,10 +193,10 @@ void KnutClient::writeRequest(const QJsonObject &message, const quint8 &serviceI
     }
 }
 
-/*! \brief Write a request on the socket without message.
+/*! \brief Writes a request to the socket without message.
  *
- *  Write a request on the socket with the \a serviceId and \a messageId for which the Knut server
- *  doesn't require any message.
+ *  Write a request to the socket for the service \a serviceId and the \a messageId where the
+ *  message is not required to have a JSON formatted message.
  */
 void KnutClient::writeRequest(const quint8 &serviceId, const quint16 &messageId)
 {
@@ -196,28 +207,5 @@ void KnutClient::writeRequest(const quint8 &serviceId, const quint16 &messageId)
 void KnutClient::mErrorHandler(const QAbstractSocket::SocketError &socketError)
 {
     qDebug() << "Socket error:" << socketError;
-}
-
-/*! \brief This slot is called if no heartbeat is received.
- *
- *  If no heartbeat is received from the Knut server, this slot is called. The connection state is
- *  set to \c false, the socket is disconnected and a reconnect to the server is attempted.
- *
- *  \sa mConnectSocket()
- */
-void KnutClient::mHeartbeatMissed()
-{
-    qWarning("Heartbeat missed");
-
-    if (connected) {
-        connected = false;
-        emit connectedChanged();
-    }
-
-    if (mSocket.state() != QAbstractSocket::SocketState::UnconnectedState)
-        mSocket.disconnectFromHost();
-
-    mConnectSocket();
-
-    mHeartbeatTimer->start();
+    onDisconnected();
 }

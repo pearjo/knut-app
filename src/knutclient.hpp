@@ -22,11 +22,6 @@
 #include <QTcpSocket>
 #include <QTimer>
 
-#define CONNECT_TIMEOUT 10000
-#define HEARTBEAT_FREQUENCY 1
-#define HOST_ADDRESS_SETTING "knutClient/hostAddress"
-#define PORT_SETTING "knutClient/port"
-
 /*! \brief The client which connects to the <a href="https://github.com/pearjo/knut-server">
  *         Knut server</a>.
  *
@@ -40,18 +35,22 @@ class KnutClient : public QObject
 {
     Q_OBJECT
 
-    //! Indicates whether the KnutClient is connected to the Knut server.
+    //! This property indicates whether the KnutClient is connected to the Knut server or not.
     Q_PROPERTY(bool connected MEMBER connected NOTIFY connectedChanged);
 
-    //! The address to which the Knut server is bound.
+    //! This property holds the address to which the Knut server is bound.
     Q_PROPERTY(QString hostAddress READ hostAddress WRITE setHostAddress NOTIFY hostAddressChanged)
 
-    //! The port on which the Knut server can be accessed.
+    //! This property holds the port on which the Knut server can be accessed.
     Q_PROPERTY(int port READ port WRITE setPort NOTIFY portChanged)
 
 public:
     explicit KnutClient(QObject *parent = nullptr);
     ~KnutClient();
+
+    static const QString HOST_ADDRESS_SETTING;
+    static const QString PORT_SETTING;
+    static const int RECONNECT_TIMEOUT;
 
     QString hostAddress() const {return mHostAddress;}
     bool connected = false;
@@ -67,6 +66,7 @@ signals:
     void hostAddressChanged();
     void knutConnected();
     void portChanged();
+
     /*! \brief Emitted when a new \a message is received.
      *
      *  This signal is emitted when a new \a message is received and processed. Any service can
@@ -83,20 +83,20 @@ signals:
                          const quint16 &messageId);
 
 private slots:
-    void mHeartbeatMissed();
+    void mConnectSocket();
+    void mErrorHandler(const QAbstractSocket::SocketError &socketError);
 
 public slots:
+    void onDisconnected();
     void onReadyRead();
 
 private:
     QSettings mSettings;
     QString mHostAddress;
     QTcpSocket mSocket;
-    QTimer *mHeartbeatTimer;
+    QTimer *mReconnectTimer;
     bool mConnectingToKnut = false;
     int mPort;
-    void mConnectSocket();
-    void mErrorHandler(const QAbstractSocket::SocketError &socketError);
 };
 
 #endif // KNUTCLIENT_HPP
