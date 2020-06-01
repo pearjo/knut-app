@@ -13,35 +13,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import Knut.Controls 1.0 as Knut
 import Knut.Theme 1.0
+import QtGraphicalEffects 1.14
 import QtQuick 2.14
+import QtQuick.Controls 2.14
 
-import "." as Temperature
-
-ListView {
+//! A item that displays a blurred and dimmed modal background.
+Item {
     id: root
 
-    implicitHeight: Theme.referenceHeight
-    implicitWidth: Theme.referenceWidth
+    property alias source: fastBlur.source
 
-    model: !!temperatureClient ? temperatureClient.temperatureModel : undefined
+    FastBlur {
+        id: fastBlur
 
-    delegate: Temperature.TemperatureItem {
-        anchors {
-            left: parent.left
-            right: parent.right
-        }
+        anchors.fill: parent
 
-        temperature: model.temperature
+        radius: 48
+        source: !!ApplicationWindow.window ? ApplicationWindow.window.contentItem
+                                           : null
     }
 
-    header: Knut.ListViewHeader {
-        anchors {
-            left: parent.left
-            right: parent.right
-        }
+    Rectangle { anchors.fill: parent; color: Theme.darkLayer }
 
-        title: qsTr("Temperatures")
+    Behavior on opacity {
+        NumberAnimation {
+            easing.type: Easing.OutCubic
+            duration: Theme.animationDuration
+        }
     }
 }

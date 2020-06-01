@@ -39,18 +39,14 @@ RESOURCES += \
     $$files($$PWD/images/icons/*.svg) \
     $$files($$PWD/images/icons/other/markdown-mark/*.svg) \
     $$files($$PWD/images/icons/other/material/*.svg) \
-    $$files($$PWD/qml/*.qml) \
-    $$files($$PWD/qml/imports/*) \
-    $$files($$PWD/qml/knut/*.qml) \
+    $$files($$PWD/qml/*) \
     $$files($$PWD/qml/lights/*.qml) \
     $$files($$PWD/qml/screens/*.qml) \
     $$files($$PWD/qml/tasks/*.qml) \
     $$files($$PWD/qml/temperature/*.qml)
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH += \
-    $$PWD/qml \
-    $$PWD/qml/imports
+QML_IMPORT_PATH += $$PWD/qml
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 # QML_DESIGNER_IMPORT_PATH =
@@ -74,6 +70,7 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-sources
 
 android {
     ANDROID_VERSION_NAME = $$VERSION
+    TARGET = Knut
 }
 
 desktop.files += knut-app.desktop

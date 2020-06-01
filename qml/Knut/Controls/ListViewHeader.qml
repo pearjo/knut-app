@@ -13,35 +13,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import Knut.Controls 1.0 as Knut
 import Knut.Theme 1.0
 import QtQuick 2.14
 
-import "." as Temperature
-
-ListView {
+//! The header Item of a ListView.
+Rectangle {
     id: root
 
-    implicitHeight: Theme.referenceHeight
+    /// The \a ListView title text.
+    property alias title: titleText.text
+
+    implicitHeight: 56
     implicitWidth: Theme.referenceWidth
 
-    model: !!temperatureClient ? temperatureClient.temperatureModel : undefined
+    color: Theme.background
 
-    delegate: Temperature.TemperatureItem {
+    Text {
+        id: titleText
+
+        height: contentHeight
+        width: parent.width * 0.8
+
         anchors {
             left: parent.left
-            right: parent.right
+            leftMargin: Theme.horizontalMargin
+            verticalCenter: parent.verticalCenter
         }
 
-        temperature: model.temperature
-    }
-
-    header: Knut.ListViewHeader {
-        anchors {
-            left: parent.left
-            right: parent.right
-        }
-
-        title: qsTr("Temperatures")
+        color: Theme.textAccent
+        elide: Text.ElideRight
+        font: Theme.fontH4
+        verticalAlignment: Text.AlignVCenter
     }
 }

@@ -13,14 +13,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut.Controls 1.0 as Knut
+import Knut.Theme 1.0
 import QtCharts 2.14
 import QtGraphicalEffects 1.14
 import QtQuick 2.14
 import QtQuick.Controls 2.14
-
-import Theme 1.0
-
-import "../knut" as Knut
 
 /*!
  * \brief Displays a temperature item

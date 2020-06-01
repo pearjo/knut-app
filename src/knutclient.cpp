@@ -31,7 +31,7 @@ KnutClient::KnutClient(QObject *parent) :
     mSocket(this)
 {
     // load settings
-    mHostAddress = mSettings.value(HOST_ADDRESS_SETTING, "localhost").toString();
+    mHostAddress = mSettings.value(HOST_ADDRESS_SETTING, "").toString();
     mPort = mSettings.value(PORT_SETTING, 8080).toInt();
 
     // set reconnect timer

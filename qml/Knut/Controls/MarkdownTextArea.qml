@@ -13,11 +13,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut.Theme 1.0
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQml 2.14
-
-import Theme 1.0
 
 /*! A text edit field where the text can either be edited as plain text
  *  supporting the Markdown syntax or as rendered Markdown text.

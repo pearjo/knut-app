@@ -13,14 +13,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut.Theme 1.0
+import QtGraphicalEffects 1.14
 import QtQuick 2.14
-
-import Theme 1.0
 
 import "." as Knut
 
 Item {
-    id: root
+    id: actionButton
 
     property bool checkable: false
     property bool checked: false
@@ -28,19 +28,49 @@ Item {
 
     signal clicked()
 
-    implicitHeight: 48
-    implicitWidth: 48
+    implicitHeight: 56
+    implicitWidth: 56
+
+    Rectangle {
+        id: background
+
+        anchors.fill: parent
+
+        color: Theme.background
+        radius: height / 2
+
+        Rectangle {
+            id: brightLayer
+
+            anchors.fill: parent
+
+            color: Theme.brightLayer
+            radius: height / 2
+        }
+    }
+
+    DropShadow {
+        anchors.fill: background
+
+        cached: true
+        color: Theme.shadowColor
+        horizontalOffset: Theme.shadowHorizontalOffset
+        radius: Theme.shadowRadius
+        samples: Theme.shadowSamples
+        source: background
+        verticalOffset: Theme.shadowVerticalOffset
+    }
 
     Knut.ColorIcon {
         id: buttonIcon
 
-        anchors {
-            fill: parent
-            margins: 12
-        }
+        height: 24
+        width: height
 
-        color: root.checkable && !root.checked ? Theme.controlInactive
-                                               : Theme.controlActive
+        anchors.centerIn: parent
+
+        color: actionButton.checkable && actionButton.checked ? Theme.accent
+                                                              : Theme.foreground
         icon.fillMode: Image.PreserveAspectFit
     }
 
@@ -49,6 +79,6 @@ Item {
 
         anchors.fill: parent
 
-        onClicked: root.clicked()
+        onClicked: actionButton.clicked()
     }
 }

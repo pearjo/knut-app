@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut.Theme 1.0
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.14
@@ -21,10 +22,7 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQml 2.14
 
-import Theme 1.0
-
-import "." as Task
-import "../knut" as Knut
+import "." as Knut
 
 //! A popup to pick a date and time.
 Item {
@@ -166,7 +164,7 @@ Item {
                             verticalCenter: parent.verticalCenter
                         }
 
-                        source: "../../images/icons/other/material/navigate_before-24px.svg"
+                        source: "../../../images/icons/other/material/navigate_before-24px.svg"
 
                         onClicked: datePicker.showPreviousMonth()
                     }
@@ -179,7 +177,7 @@ Item {
                             verticalCenter: parent.verticalCenter
                         }
 
-                        source: "../../images/icons/other/material/navigate_next-24px.svg"
+                        source: "../../../images/icons/other/material/navigate_next-24px.svg"
 
                         onClicked: datePicker.showNextMonth()
                     }
@@ -260,7 +258,7 @@ Item {
             verticalCenter: parent.bottom
         }
 
-        source: "../../images/icons/other/material/check-24px.svg"
+        source: "../../../images/icons/other/material/check-24px.svg"
 
         onClicked: {
             var selectedDate = datePicker.selectedDate;

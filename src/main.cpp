@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty(QStringLiteral("temperatureClient"),
                                              &temperatureClient);
 
-    engine.addImportPath(QStringLiteral("qrc:/qml/imports"));
+    engine.addImportPath(QStringLiteral("qrc:/qml"));
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     if (engine.rootObjects().isEmpty())

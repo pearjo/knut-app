@@ -13,17 +13,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut.Controls 1.0 as Knut
+import Knut.Theme 1.0
 import QtGraphicalEffects 1.14
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 
-import "knut" as Knut
 import "lights" as Lights
 import "screens" as Screens
 import "tasks" as Tasks
 import "temperature" as Temperature
-
-import Theme 1.0
 
 ApplicationWindow {
     id: app
@@ -76,7 +75,7 @@ ApplicationWindow {
         isOpen: topBar.backdropOpen
     }
 
-    Knut.TopBar {
+    Screens.TopBar {
         id: topBar
 
         anchors {

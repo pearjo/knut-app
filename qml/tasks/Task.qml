@@ -13,16 +13,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut 1.0
+import Knut.Controls 1.0 as Knut
+import Knut.Theme 1.0
 import QtGraphicalEffects 1.14
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQml 2.14
 
-import Knut 1.0
-import Theme 1.0
-
 import "." as Task
-import "../knut" as Knut
 
 //! A item that displays a Knut task.
 FocusScope {

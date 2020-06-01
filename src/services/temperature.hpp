@@ -58,9 +58,6 @@ signals:
     void timeHistoryChanged();
     void temperatureHistoryChanged();
     void unitChanged();
-
-private:
-    quint8 mServiceId = 0x01;
 };
 
 #endif // TEMPERATURE_HPP

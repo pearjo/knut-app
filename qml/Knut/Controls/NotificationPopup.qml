@@ -13,11 +13,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut.Theme 1.0
 import QtQuick 2.14
 import QtQuick.Controls 2.14
-import Theme 1.0
 
-import "../knut" as Knut
+import "." as Knut
 
 /*! \brief Notification popup that can display a message.
  *
@@ -74,7 +74,7 @@ Popup {
             Knut.ColorIcon {
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: Theme.accent
-                source: "../../images/icons/other/material/notifications_none-24px.svg"
+                source: "../../../images/icons/other/material/notifications_none-24px.svg"
             }
 
             Text {

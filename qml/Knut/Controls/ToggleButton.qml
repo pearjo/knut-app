@@ -13,33 +13,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtGraphicalEffects 1.14
+import Knut.Theme 1.0
 import QtQuick 2.14
-import QtQuick.Controls 2.14
-import Theme 1.0
 
-//! A item that displays a blurred and dimmed modal background.
+import "." as Knut
+
 Item {
     id: root
 
-    property alias source: fastBlur.source
+    property bool checkable: false
+    property bool checked: false
+    property alias source: buttonIcon.source
 
-    FastBlur {
-        id: fastBlur
+    signal clicked()
+
+    implicitHeight: 48
+    implicitWidth: 48
+
+    Knut.ColorIcon {
+        id: buttonIcon
+
+        anchors {
+            fill: parent
+            margins: 12
+        }
+
+        color: root.checkable && !root.checked ? Theme.controlInactive
+                                               : Theme.controlActive
+        icon.fillMode: Image.PreserveAspectFit
+    }
+
+    MouseArea {
+        id: button
 
         anchors.fill: parent
 
-        radius: 48
-        source: !!ApplicationWindow.window ? ApplicationWindow.window.contentItem
-                                           : null
-    }
-
-    Rectangle { anchors.fill: parent; color: Theme.darkLayer }
-
-    Behavior on opacity {
-        NumberAnimation {
-            easing.type: Easing.OutCubic
-            duration: Theme.animationDuration
-        }
+        onClicked: root.clicked()
     }
 }

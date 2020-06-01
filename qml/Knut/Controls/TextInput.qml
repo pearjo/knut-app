@@ -13,43 +13,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut.Theme 1.0
 import QtQuick 2.14
-import QtQuick.Controls 2.14
 
-import "." as Knut
-
-import Theme 1.0
-
-//! A input item similar to \a TextInput but for a Date.
+//! An extended TextInput which displays a \a label if the input is empty.
 Item {
     id: root
 
+    //! A label which is displayed if the TextInput is empty.
+    property string label: qsTr("Label")
     //! A helper text which is displayed beneath the TextInput
     property string helperText: qsTr("Helper Text")
 
-    //! A label which is displayed if the TextInput is empty.
-    property string label: qsTr("Label")
-
-    /*! This property holds the title of the \a DateTimePicker which will be
-     *  opened when pressing the edit button.
-     */
-    property string title: qsTr("Title")
-
-    //! This property holds the Date.
-    property var date: new Date()
-
-    //! Emitted whenever the \a date should be edited.
-    /* signal editClicked */
+    //! The input text.
+    property alias text: textInput.text
+    //! The QtQuick TextInput.
+    property alias textInput: textInput
 
     implicitHeight: helperText !== "" ? childrenRect.height
-                                      : dateTimeInputItem.height
+                                      : textInputItem.height
     implicitWidth: 280
 
-    Item {
-        id: dateTimeInputItem
+    Rectangle {
+        id: textInputItem
 
         height: 56
         width: parent.width
+
+        color: Theme.background
+
+        Rectangle { anchors.fill: parent; color: Theme.darkLayer }
+
+        Rectangle {
+            id: editLine
+
+            height: 1
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+
+            color: Theme.accent
+        }
 
         Text {
             id: labelText
@@ -68,8 +75,8 @@ Item {
             text: root.label
         }
 
-        Text {
-            id: dateTimeText
+        TextInput {
+            id: textInput
 
             anchors {
                 baseline: labelText.baseline
@@ -81,23 +88,16 @@ Item {
             color: Theme.textForeground
             font: Theme.fontBody1
             verticalAlignment: Text.AlignVCenter
-            text: root.date.toLocaleString(Locale.ShortFormat)
         }
 
-        Knut.ToggleButton {
-            id: editButton
+        MouseArea {
+            id: focusButton
 
-            anchors {
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-            }
+            anchors.fill: parent
 
-            source: "../../images/icons/other/material/create-24px.svg"
+            enabled: !textInput.activeFocus
 
-            onClicked: {
-                forceActiveFocus();
-                popup.open();
-            }
+            onClicked: textInput.forceActiveFocus()
         }
     }
 
@@ -109,7 +109,7 @@ Item {
             leftMargin: Theme.horizontalMargin
             right: parent.right
             rightMargin: Theme.horizontalMargin
-            top: dateTimeInputItem.bottom
+            top: textInputItem.bottom
             topMargin: Theme.verticalMargin
         }
 
@@ -118,39 +118,20 @@ Item {
         font: Theme.fontCaption
     }
 
-    Popup {
-        id: popup
-
-        anchors.centerIn: parent
-
-        background: Rectangle { anchors.fill: parent; color: "transparent" }
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-        focus: true
-        modal: true
-        parent: Overlay.overlay
-
-        contentItem: Knut.DateTimePicker {
-            id: editPopup
-
-            anchors.fill: parent
-
-            date: root.date
-            title: root.title
-
-            onDateTimeSelected: {
-                popup.close();
-                root.date = selectedDate;
-            }
-        }
-
-        Overlay.modal: Knut.ModalBackground {}
-    }
-
     // default is when input is not empty and has no active focus
     states: [
         State {
+            name: "edit"
+            when: textInput.activeFocus
+
+            PropertyChanges {
+                target: editLine
+                height: 2
+            }
+        },
+        State {
             name: "emptyInput"
-            when: dateTimeText.text === "" && !text.activeFocus
+            when: textInput.text === "" && !text.activeFocus
 
             AnchorChanges {
                 target: labelText
@@ -161,11 +142,16 @@ Item {
                 }
             }
             PropertyChanges {
+                target: editLine
+                color: Theme.foreground
+                opacity: Theme.opacity
+            }
+            PropertyChanges {
                 target: labelText
                 verticalAlignment: Text.AlignVCenter
                 color: Theme.textForeground
                 opacity: Theme.opacity
-                font: dateTimeText.font
+                font: textInput.font
             }
         }
     ]

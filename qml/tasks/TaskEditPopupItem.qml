@@ -13,12 +13,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut.Controls 1.0 as Knut
+import Knut.Theme 1.0
 import QtQuick 2.14
 import QtQuick.Layouts 1.14
-import Theme 1.0
 
 import "." as Task
-import "../knut" as Knut
 
 //! A pop-up item to edit a task.
 Item {

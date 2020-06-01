@@ -13,37 +13,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Knut.Theme 1.0
 import QtQuick 2.14
 
-import Theme 1.0
-
-//! The header Item of a ListView.
-Rectangle {
+Item {
     id: root
 
-    /// The \a ListView title text.
-    property alias title: titleText.text
+    property bool checkable: false
+    property bool checked: false
+    property string text: qsTr("Button")
 
-    implicitHeight: 56
-    implicitWidth: Theme.referenceWidth
+    signal clicked()
 
-    color: Theme.background
+    implicitHeight: 36
+    implicitWidth: Math.max(64, (buttonText.contentWidth
+                                 + 2 * Theme.horizontalMargin))
 
     Text {
-        id: titleText
-
-        height: contentHeight
-        width: parent.width * 0.8
+        id: buttonText
 
         anchors {
-            left: parent.left
+            fill: parent
+            bottomMargin: Theme.verticalMargin
             leftMargin: Theme.horizontalMargin
-            verticalCenter: parent.verticalCenter
+            rightMargin: Theme.horizontalMargin
+            topMargin: Theme.verticalMargin
         }
 
-        color: Theme.textAccent
-        elide: Text.ElideRight
-        font: Theme.fontH4
+        color: root.checkable && root.checked ? Theme.textAccent
+                                              : Theme.textForeground
+        font: Theme.fontButton
+        horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+        text: root.text
+    }
+
+    MouseArea {
+        id: button
+
+        anchors.fill: parent
+
+        onClicked: root.clicked()
     }
 }
