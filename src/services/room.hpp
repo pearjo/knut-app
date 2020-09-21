@@ -25,25 +25,25 @@ class Room : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString room MEMBER room CONSTANT);
-    Q_PROPERTY(float roomState READ roomState WRITE setRoomState NOTIFY roomStateChanged);
+    Q_PROPERTY(int roomState READ roomState WRITE setRoomState NOTIFY roomStateChanged);
 
   public:
     explicit Room(KnutClient *socket, QObject *parent = Q_NULLPTR);
 
     QString room;
 
-    float roomState() const {return mRoomState;}
+    int roomState() const {return mRoomState;}
 
   signals:
     void roomStateChanged();
 
   public slots:
-    void setRoomState(const float &roomState);
-    void handleRoomResponse(const float &roomState);
+    void setRoomState(const int &roomState);
+    void handleRoomResponse(const int &roomState);
 
   private:
-    const quint8 mServiceId = 0x02;
-    float mRoomState;
+    const quint8 mServiceId = 2;
+    int mRoomState;
     KnutClient *mKnutClient;
 };
 

@@ -33,9 +33,9 @@ class LightClient : public QObject
     //! The model of all rooms with the roles \c roomName and \c room where \c room
     //! references to a Room.
     Q_PROPERTY(QStandardItemModel* roomModel MEMBER roomModel NOTIFY roomModelChanged);
-    //! The state of all lights where \c 0 is all off, \c 1 all on and \c 0.5 neither all on
+    //! The state of all lights where \c -1 is all off, \c 1 all on and \c 0 neither all on
     //! nor off.
-    Q_PROPERTY(float lightStateAll READ lightStateAll WRITE setLightStateAll
+    Q_PROPERTY(int lightStateAll READ lightStateAll WRITE setLightStateAll
                NOTIFY lightStateAllChanged);
 
 public:
@@ -46,32 +46,32 @@ public:
     QHash<QString, QObject *> rooms() const {return mRooms;}
     QStandardItemModel *lightModel {nullptr};
     QStandardItemModel *roomModel {nullptr};
-    float lightStateAll() const {return mLightStateAll;}
+    int lightStateAll() const {return mLightStateAll;}
     void connectToClient(KnutClient *knutClient);
     void setLightStateAll(const float &lightStateAll);
 
     //! Message ID used to communicate with the Knut server via the KnutClient::writeRequest().
     enum MessageId {
         //! Requests the status of a Light. The message must have the key \c uniqueName.
-        STATUS_REQUEST  = 0x0001,
+        STATUS_REQUEST  = 1,
         //! The status of a Light.
-        STATUS_RESPONSE = 0x0101,
+        STATUS_RESPONSE = 2,
         //! Requests the status of all Light.
-        LIGHTS_REQUEST  = 0x0002,
+        LIGHTS_REQUEST  = 3,
         //! A STATUS_RESPONSE for all Light services registered by the Knut server.
-        LIGHTS_RESPONSE = 0x0102,
+        LIGHTS_RESPONSE = 4,
         //! Requests the combined state of all lights.
-        ALL_LIGHTS_REQUEST = 0x0003,
+        ALL_LIGHTS_REQUEST = 5,
         //! The state of all Light services combined. \sa lightStateAll
-        ALL_LIGHTS_RESPONSE = 0x0103,
+        ALL_LIGHTS_RESPONSE = 6,
         //! Request a list of all registered Room.
-        ROOMS_LIST_REQUEST = 0x0004,
+        ROOMS_LIST_REQUEST = 7,
         //! The list of all registered Room.
-        ROOMS_LIST_RESPONSE = 0x0104,
+        ROOMS_LIST_RESPONSE = 8,
         //! Requests the state of a single Room.
-        ROOM_REQUEST = 0x0005,
+        ROOM_REQUEST = 9,
         //! The state of a single Room where the state value is analog to the lightStateAll value.
-        ROOM_RESPONSE = 0x0105
+        ROOM_RESPONSE = 10
     };
     Q_ENUMS(MessageId)
 
@@ -94,8 +94,8 @@ private:
     KnutClient *mKnutClient;
     QHash<QString, QObject *> mLights;
     QHash<QString, QObject *> mRooms;
-    const quint8 mServiceId = 0x02;
-    float mLightStateAll = 0;
+    const quint8 mServiceId = 2;
+    int mLightStateAll = -1;
 };
 
 #endif // LIGHT_CLIENT_HPP

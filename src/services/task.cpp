@@ -36,7 +36,7 @@ void Task::handleStatusResponse(const QJsonObject & message)
     int due = message["due"].toInt();
     int reminder = message["reminder"].toInt();
 
-    if (!uid.isEmpty() && uid != message["uid"].toString())
+    if (!uid.isEmpty() && uid != message["id"].toString())
         return;
 
     author = message["author"].toString();
@@ -177,7 +177,7 @@ void Task::statusChanged()
     status["due"] = mDue.toSecsSinceEpoch();
     status["reminder"] = mDue.toSecsSinceEpoch() - mReminder.toSecsSinceEpoch();
     status["title"] = mTitle;
-    status["uid"] = uid;
+    status["id"] = uid;
 
     mKnutClient->writeRequest(status, mServiceId, TaskClient::TASK_RESPONSE);
 }

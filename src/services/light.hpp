@@ -96,7 +96,7 @@ signals:
 private:
     void statusChanged();
 
-    const quint8 mServiceId = 0x02;
+    const quint8 mServiceId = 2;
     bool mLightState = false;
     qint16 mTemperature = false;
     qint8 mDimlevel = false;

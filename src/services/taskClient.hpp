@@ -52,17 +52,17 @@ public:
      */
     enum MessageType {
         //! A reminder send by the server.
-        REMINDER  = 0x0101,
+        REMINDER  = 1,
         //! Requests a task.
-        TASK_REQUEST = 0x0002,
+        TASK_REQUEST = 2,
         //! The task send by the server.
-        TASK_RESPONSE = 0x0102,
+        TASK_RESPONSE = 3,
         //! Requests all tasks.
-        ALL_TASKS_REQUEST = 0x0003,
+        ALL_TASKS_REQUEST = 4,
         //! The state of all Task services.
-        ALL_TASKS_RESPONSE = 0x0103,
+        ALL_TASKS_RESPONSE = 5,
         //! Requests to delete a Task.
-        DELETE_TASK_REQUEST = 0x0004,
+        DELETE_TASK_REQUEST = 6,
     };
     Q_ENUMS(MessageType)
 

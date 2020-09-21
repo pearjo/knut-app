@@ -20,9 +20,9 @@ import QtQuick.Controls 2.14
 
 /*! \brief Displays a switch with three states.
  *
- *  This switch can have the three values \c 0, \c 0.5 and \c 1.  By clicking
- *  the switch, the values \c 0 and \c 1 can only be set. However, from QML the
- *  value can be also set to \c 0.5.
+ *  This switch can have the three values \c -1, \c 0 and \c 1.  By clicking
+ *  the switch, the values \c -1 and \c 1 can only be set. However, from QML the
+ *  value can be also set to \c 0.
  */
 Slider {
     id: root
@@ -33,15 +33,19 @@ Slider {
      */
     readonly property bool boolValue: value > 0 ? true : false
 
+    readonly property real __activeWidth: Math.max(0.5 * width
+                                                   * (1 + p.triState),
+                                                   height)
+
     //! Emitted when the switch is clicked.
     signal clicked()
 
     implicitHeight: 24
     implicitWidth: 3 * implicitHeight
 
-    from: 0.0
+    from: -1.0
     live: false
-    stepSize: 1.0
+    stepSize: 2.0
     to: 1.0
 
     QtObject {
@@ -66,7 +70,7 @@ Slider {
 
         Rectangle {
             height: parent.height
-            width: Math.max(p.triState * parent.width, parent.height)
+            width: __activeWidth
 
             color: Theme.switchActive
             radius: parent.radius
@@ -77,7 +81,8 @@ Slider {
         height: parent.height
         width: parent.height
 
-        x:  p.triState * (root.width - width)
+        /* x position with triState value ranging from -1 ... 1 */
+        x: 0.5 * (root.width - width) * (p.triState + 1)
 
         Rectangle {
             height: parent.height
@@ -86,7 +91,7 @@ Slider {
             anchors.left: parent.left
 
             color: Theme.switchActive
-            visible: root.width * p.triState > width
+            visible: 0.5 * __activeWidth > width
         }
 
         Rectangle {

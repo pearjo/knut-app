@@ -21,7 +21,7 @@ Room::Room(KnutClient *socket,  QObject *parent) : QObject(parent)
     mKnutClient = socket;
 }
 
-void Room::setRoomState(const float &roomState)
+void Room::setRoomState(const int &roomState)
 {
     QJsonObject payload;
 
@@ -30,7 +30,7 @@ void Room::setRoomState(const float &roomState)
 
     mRoomState = roomState;
 
-    payload["room"] = room;
+    payload["id"] = room;
     payload["state"] = mRoomState;
     mKnutClient->writeRequest(payload, mServiceId, LightClient::MessageId::ROOM_REQUEST);
 }
@@ -41,7 +41,7 @@ void Room::setRoomState(const float &roomState)
  *
  *  \sa Room::setRoomState()
  */
-void Room::handleRoomResponse(const float &roomState)
+void Room::handleRoomResponse(const int &roomState)
 {
     if (mRoomState != roomState)
         mRoomState = roomState;

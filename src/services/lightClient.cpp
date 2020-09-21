@@ -19,6 +19,8 @@
 #include "room.hpp"
 #include "roomListModel.hpp"
 
+#include <QJsonArray>
+
 LightClient::~LightClient()
 {
     delete lightModel;
@@ -96,13 +98,15 @@ void LightClient::lightsResponse(const QJsonObject &message)
     lightModel->clear();
     lightModel->setSortRole(RoomRole);
 
-    for (QString light : message.keys()) {
-        const QJsonObject lightDict = message[light].toObject();
+    QJsonArray backends = message["backends"].toArray();
+
+    for (int i = 0; i < backends.size(); ++i) {
+        const QJsonObject lightDict = backends[i].toObject();
         Light *newLight = new Light(mKnutClient);
 
         newLight->location = lightDict["location"].toString();
         newLight->room = lightDict["room"].toString();
-        newLight->uniqueName = light;
+        newLight->uniqueName = lightDict["id"].toString();
 
         newLight->hasColor = lightDict["hasColor"].toBool();
         newLight->hasDimlevel = lightDict["hasDimlevel"].toBool();
@@ -138,10 +142,13 @@ void LightClient::roomsListResponse(const QJsonObject &message)
     roomModel->clear();
     roomModel->setSortRole(RoomListModel::RoomNameRole);
 
-    for (QString room : message.keys()) {
+    QJsonArray rooms = message["rooms"].toArray();
+
+    for (int i = 0; i < rooms.size(); ++i) {
+        const QJsonObject roomDict = rooms[i].toObject();
         Room *newRoom = new Room(mKnutClient);
-        newRoom->room = room;
-        newRoom->handleRoomResponse(message[room].toDouble());
+        newRoom->room = roomDict["id"].toString();
+        newRoom->handleRoomResponse(roomDict["state"].toInt());
 
         mRooms.insert(newRoom->room, newRoom);
 
@@ -158,8 +165,8 @@ void LightClient::roomsListResponse(const QJsonObject &message)
 //! Handles a LightClient::ROOM_RESPONSE.
 void LightClient::roomResponse(const QJsonObject &message)
 {
-    QString roomName = message["room"].toString();
-    double lightState = message["state"].toDouble();
+    QString roomName = message["id"].toString();
+    double lightState = message["state"].toInt();
     Room *room = dynamic_cast<Room *>(mRooms[roomName]);
     room->handleRoomResponse(lightState);
 }
@@ -167,7 +174,7 @@ void LightClient::roomResponse(const QJsonObject &message)
 //! Handles a LightClient::STATUS_RESPONSE
 void LightClient::statusResponse(const QJsonObject &message)
 {
-    const QString uniqueName = message["uniqueName"].toString();
+    const QString uniqueName = message["id"].toString();
     Light *light = static_cast<Light *>(mLights[uniqueName]);
     light->handleStatusResponse(message);
 }
@@ -186,7 +193,7 @@ void LightClient::setLightStateAll(const float &lightStateAll)
 //! Handles a LightClient::ALL_LIGHTS_RESPONSE.
 void LightClient::allLightsResponse(const QJsonObject &message)
 {
-    double lightStateAll = message["state"].toDouble();
+    int lightStateAll = message["state"].toInt();
 
     if (lightStateAll != mLightStateAll) {
         mLightStateAll = lightStateAll;

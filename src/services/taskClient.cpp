@@ -17,6 +17,8 @@
 #include "taskClient.hpp"
 #include "taskListModel.hpp"
 
+#include <QJsonArray>
+
 TaskClient::TaskClient(QObject *parent) :
     QObject(parent)
 {
@@ -49,7 +51,7 @@ void TaskClient::addTask(const QString &assignee, const QString &body, const QDa
     newTask[QStringLiteral("due")] = due.toSecsSinceEpoch();
     newTask[QStringLiteral("reminder")] = due.toSecsSinceEpoch() - reminder.toSecsSinceEpoch();
     newTask[QStringLiteral("title")] = title;
-    newTask[QStringLiteral("uid")] = QStringLiteral("");
+    newTask[QStringLiteral("id")] = QStringLiteral("");
 
     mKnutClient->writeRequest(newTask, mServiceId, TaskClient::TASK_RESPONSE);
 }
@@ -83,7 +85,7 @@ void TaskClient::deleteTask(const QVariant &task)
     if (knutTask == nullptr)
         return;
 
-    message[QStringLiteral("uid")] = knutTask->uid;
+    message[QStringLiteral("id")] = knutTask->uid;
 
     mKnutClient->writeRequest(message, mServiceId, TaskClient::MessageType::DELETE_TASK_REQUEST);
 }
@@ -130,11 +132,14 @@ void TaskClient::allTasksResponse(const QJsonObject &message)
     taskModel->clear();
     mTasks.clear();
 
-    for (QString task : message.keys()) {
-        const QJsonObject taskDict = message[task].toObject();
+    QJsonArray tasks = message["tasks"].toArray();
+
+    // for (QString task : message.keys()) {
+    for (int i = 0; i < tasks.size(); ++i) {
+        const QJsonObject taskDict = tasks[i].toObject();
         Task *newTask = new Task(mKnutClient);
 
-        newTask->uid = task;
+        newTask->uid = taskDict["id"].toString();
         newTask->author = taskDict["author"].toString();
 
         newTask->setAll(taskDict["assignee"].toString(),
@@ -160,7 +165,7 @@ void TaskClient::allTasksResponse(const QJsonObject &message)
 //! Handles a TaskClient::REMINDER message.
 void TaskClient::reminder(const QJsonObject &message)
 {
-    const QString uid = message["uid"].toString();
+    const QString uid = message["id"].toString();
     Task *task = static_cast<Task *>(mTasks[uid]);
 
     emit task->remind();
@@ -169,7 +174,7 @@ void TaskClient::reminder(const QJsonObject &message)
 //! Handles a TaskClient::TASK_RESPONSE.
 void TaskClient::taskResponse(const QJsonObject &message)
 {
-    const QString uid = message["uid"].toString();
+    const QString uid = message["id"].toString();
     Task *task = static_cast<Task *>(mTasks[uid]);
 
     task->setAll(message["assignee"].toString(),

@@ -54,9 +54,9 @@ public:
      */
     enum MessageType {
         //! Requests the local information.
-        LOCAL_REQUEST  = 0x0001,
+        LOCAL_REQUEST  = 1,
         //! The local information send by the server.
-        LOCAL_RESPONSE = 0x0101,
+        LOCAL_RESPONSE = 2,
     };
     Q_ENUMS(MessageType)
 

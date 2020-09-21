@@ -172,7 +172,7 @@ FocusScope {
                     verticalCenter: parent.verticalCenter
                 }
 
-                value: light.lightState ? 1 : 0
+                value: light.lightState ? 1 : -1
 
                 onClicked: light.lightState = boolValue
             }

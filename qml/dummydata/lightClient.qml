@@ -32,7 +32,7 @@ Item {
                     roomName: "Living Room",
                     room: {
                         roomName: "Living Room",
-                        roomState: 0.5
+                        roomState: 0
                     }
                 },
                 {

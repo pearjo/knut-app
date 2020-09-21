@@ -125,8 +125,8 @@ void KnutClient::onReadyRead()
             QJsonDocument dataDoc = QJsonDocument::fromJson(buffer);
             QJsonObject data = dataDoc.object();
             QJsonObject message = data["msg"].toObject();
-            serviceId = data["serviceid"].toInt();
-            messageId = data["msgid"].toInt();
+            serviceId = data["apiId"].toInt();
+            messageId = data["msgId"].toInt();
 
             buffer.clear();
 
@@ -178,8 +178,8 @@ void KnutClient::writeRequest(const QJsonObject &message, const quint8 &serviceI
     QJsonDocument dataDoc;
     QJsonObject data;
 
-    data["serviceid"] = serviceId;
-    data["msgid"] = messageId;
+    data["apiId"] = serviceId;
+    data["msgId"] = messageId;
     data["msg"] = message;
     dataDoc.setObject(data);
 

@@ -137,7 +137,7 @@ void Light::statusChanged()
     status["hasTemperature"] = hasTemperature;
     status["location"] = location;
     status["state"] = mLightState;
-    status["uniqueName"] = uniqueName;
+    status["id"] = uniqueName;
 
     // optional attributes
     status["color"] = hasColor ? mColor.name() : QString();

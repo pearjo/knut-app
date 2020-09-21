@@ -74,9 +74,9 @@ android {
 }
 
 desktop.files += knut-app.desktop
-desktop.path = ~/.local/share/applications
+desktop.path = /usr/local/share/applications
 icon.files += images/knut-app.svg
-icon.path = ~/.local/share/icons
-target.path = ~/.local/bin
+icon.path = /usr/local/share/icons
+target.path = /usr/local/bin
 
 INSTALLS += desktop icon target

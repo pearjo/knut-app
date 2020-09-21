@@ -82,29 +82,30 @@ void TemperatureClient::onReadyRead(const QJsonObject &payload, const quint8 &se
 //! Handles a TemperatureClient::STATUS_RESPONSE.
 void TemperatureClient::statusResponse(const QJsonObject &payload)
 {
-    for (QString uniqueName : payload.keys()) {
-        const QJsonObject statusDict = payload[uniqueName].toObject();
-        Temperature *temperature = dynamic_cast<Temperature *>(mTemperatures[uniqueName]);
+    QString uniqueName = payload["id"].toString();
+    Temperature *temperature = dynamic_cast<Temperature *>(mTemperatures[uniqueName]);
 
-        if (temperature == Q_NULLPTR) {
-            qWarning() << "Received invalid STATUS_RESPONSE response for"
-                       << uniqueName << ".";
-            return;
-        }
-
-        temperature->location = statusDict["location"].toString();
-        emit temperature->locationChanged();
-        temperature->unit = statusDict["unit"].toString();
-        emit temperature->unitChanged();
-        temperature->condition = statusDict["condition"].toString();
-        emit temperature->conditionChanged();
-        temperature->temperature = statusDict["temperature"].toDouble();
-        emit temperature->temperatureChanged();
-        temperature->timeHistory.append(QDateTime::currentMSecsSinceEpoch());
-        emit temperature->timeHistoryChanged();
-        temperature->temperatureHistory.append(temperature->temperature);
-        emit temperature->temperatureHistoryChanged();
+    if (temperature == Q_NULLPTR) {
+        qWarning() << "Received invalid STATUS_RESPONSE response for"
+                   << uniqueName << ".";
+        return;
     }
+
+    temperature->location = payload["location"].toString();
+    emit temperature->locationChanged();
+
+    // set to degree Celsius since the server provides the temperature in Kelvin
+    temperature->unit = "°C";
+    emit temperature->unitChanged();
+    temperature->condition = payload["condition"].toString();
+    emit temperature->conditionChanged();
+    // convert from Kelvin to degree Celsius
+    temperature->temperature = payload["temperature"].toDouble() - 273.15;
+    emit temperature->temperatureChanged();
+    temperature->timeHistory.append(QDateTime::currentMSecsSinceEpoch());
+    emit temperature->timeHistoryChanged();
+    temperature->temperatureHistory.append(temperature->temperature);
+    emit temperature->temperatureHistoryChanged();
 }
 
 /*! \brief Handles a TemperatureClient::TEMPERATURE_LIST_RESPONSE.
@@ -118,22 +119,26 @@ void TemperatureClient::temperatureListResponse(const QJsonObject &payload)
     temperatureModel->clear();
     temperatureModel->setSortRole(TemperatureListModel::LocationRole);
 
-    for (QString temperature : payload.keys()) {
-        const QJsonObject temperatureDict = payload[temperature].toObject();
-        Temperature *newTemperature = new Temperature(mKnutClient);
+    QJsonArray backends = payload["backends"].toArray();
 
-        newTemperature->uniqueName = temperature;
+    for (int i = 0; i < backends.size(); ++i) {
+        Temperature *newTemperature = new Temperature(mKnutClient);
+        QJsonObject temperatureDict = backends[i].toObject();
+
+        newTemperature->uniqueName = temperatureDict["id"].toString();
         newTemperature->location = temperatureDict["location"].toString();
         emit newTemperature->locationChanged();
-        newTemperature->unit = temperatureDict["unit"].toString();
+        // set to degree Celsius since the server provides the temperature in Kelvin
+        newTemperature->unit = "°C";
         emit newTemperature->unitChanged();
-        newTemperature->temperature = temperatureDict["temperature"].toDouble();
+        // convert from Kelvin to degree Celsius
+        newTemperature->temperature = temperatureDict["temperature"].toDouble() - 273.15;
         emit newTemperature->temperatureChanged();
         newTemperature->condition = temperatureDict["condition"].toString();
         emit newTemperature->conditionChanged();
 
         // update the local weather
-        if (temperature == LOCAL_WEATHER) {
+        if (newTemperature->uniqueName == LOCAL_WEATHER) {
             localWeather = newTemperature;
             emit localWeatherChanged();
         }
@@ -142,7 +147,7 @@ void TemperatureClient::temperatureListResponse(const QJsonObject &payload)
 
         // request the temperature history
         QJsonObject request;
-        request["uniqueName"] = newTemperature->uniqueName;
+        request["id"] = newTemperature->uniqueName;
         mKnutClient->writeRequest(request,
                                   mServiceId,
                                   TemperatureClient::MessageId::TEMPERATURE_HISTORY_REQUEST);
@@ -162,7 +167,7 @@ void TemperatureClient::temperatureListResponse(const QJsonObject &payload)
 //! Handles a TemperatureClient::TEMPERATURE_HISTORY_RESPONSE.
 void TemperatureClient::temperatureHistoryResponse(const QJsonObject &payload)
 {
-    QString uniqueName = payload["uniqueName"].toString();
+    QString uniqueName = payload["id"].toString();
     QJsonArray time = payload["time"].toArray();
     QJsonArray history = payload["temperature"].toArray();
     Temperature *temperature = dynamic_cast<Temperature *>(mTemperatures[uniqueName]);
@@ -175,7 +180,8 @@ void TemperatureClient::temperatureHistoryResponse(const QJsonObject &payload)
     }
 
     for (int i = 0; i < time.size(); ++i) {
-        temperature->temperatureHistory.append(history[i].toDouble());
+        // convert from Kelvin to degree Celsius
+        temperature->temperatureHistory.append(history[i].toDouble() - 273.15);
         temperature->timeHistory.append(static_cast<qint64>(time[i].toDouble()*1000));
     }
 

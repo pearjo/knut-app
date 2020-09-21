@@ -43,6 +43,7 @@ class TemperatureClient : public QObject
     Q_PROPERTY(QStandardItemModel *temperatureModel
                MEMBER temperatureModel
                NOTIFY temperatureModelChanged);
+
     //! The local weather Temperature object.
     Q_PROPERTY(Temperature *localWeather MEMBER localWeather NOTIFY localWeatherChanged);
 
@@ -58,24 +59,24 @@ public:
     /*! \brief Message ID used to communicate with the Knut server via the
      *         KnutClient::writeRequest().
      *
-     *  For more details read the
-     *  <a href="https://knut-server.readthedocs.io/en/latest/reference/knutapis.html#knut.apis.Temperature.request_handler">
-     *  API documentation</a> of the server.
+     *  For more details read the <a
+     *  href="https://knut-server.readthedocs.io/en/latest/guide/apis.html#temperature"> client API
+     *  documentation</a> of the server.
      */
     enum MessageId {
         //! Requests the temperature status for a single location. The message must have the key \c
         //! uniqueName.
-        STATUS_REQUEST  = 0x0001,
+        STATUS_REQUEST  = 1,
         //! The status of a single temperature.
-        STATUS_RESPONSE = 0x0101,
+        STATUS_RESPONSE = 2,
         //! Request a list of all temperature locations with their status.
-        TEMPERATURE_LIST_REQUEST = 0x0002,
+        TEMPERATURE_LIST_REQUEST = 3,
         //! A list of temperature locations with their status.
-        TEMPERATURE_LIST_RESPONSE = 0x0102,
+        TEMPERATURE_LIST_RESPONSE = 4,
         //! Request the temperature history for a single location.
-        TEMPERATURE_HISTORY_REQUEST = 0x0003,
+        TEMPERATURE_HISTORY_REQUEST = 5,
         //! The temperature history of a single location with the corresponding time history.
-        TEMPERATURE_HISTORY_RESPONSE = 0x0103
+        TEMPERATURE_HISTORY_RESPONSE = 6
     };
     Q_ENUMS(MessageId)
 
@@ -90,7 +91,7 @@ public slots:
 private:
     KnutClient *mKnutClient;
     QHash<QString, QObject *> mTemperatures;
-    const quint8 mServiceId = 0x01;
+    const quint8 mServiceId = 1;
     void requestTemperature();
     void statusResponse(const QJsonObject &payload);
     void temperatureHistoryResponse(const QJsonObject &payload);
